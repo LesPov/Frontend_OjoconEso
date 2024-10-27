@@ -23,10 +23,12 @@ h1 {
     justify-content: center;
     gap: 10px;
 }
-#info1{
+
+#info1 {
     font-size: 25px;
     font-weight: 700;
 }
+
 .info_item {
     display: flex;
     flex-direction: column;
@@ -40,14 +42,26 @@ h1 {
     height: auto;
     transform-origin: center;
 }
-.info_item .icon3 {
-    width: 100%;
-    height: auto;
-    transform-origin: center;
+
+ .a1 {
+
+    filter: drop-shadow(0px 0px 10px rgb(115, 0, 125));
 }
+
+ .a2 {
+
+    filter: drop-shadow(0px 0px 10px rgb(3, 0, 187));
+}
+
+ .a3 {
+
+    filter: drop-shadow(0px 0px 10px rgb(0, 151, 0));
+}
+
 .info_item p {
     text-align: center;
 }
+
 .container_content {
     width: 100%;
     border-radius: 15px;
@@ -55,7 +69,7 @@ h1 {
     align-items: center;
     flex-direction: column;
     gap: 30px;
-  }
+}
 
 button {
     position: relative;
@@ -67,9 +81,9 @@ button {
     text-decoration: none;
     font-family: inherit;
     font-size: 15px;
-  }
-  
-  button.learn-more {
+}
+
+button.learn-more {
     font-weight: 600;
     color: #fff;
     text-transform: uppercase;
@@ -81,9 +95,9 @@ button {
     transform-style: preserve-3d;
     -webkit-transition: background 150ms cubic-bezier(0, 0, 0.58, 1), -webkit-transform 150ms cubic-bezier(0, 0, 0.58, 1);
     transition: transform 150ms cubic-bezier(0, 0, 0.58, 1), background 150ms cubic-bezier(0, 0, 0.58, 1), -webkit-transform 150ms cubic-bezier(0, 0, 0.58, 1);
-  }
-  
-  button.learn-more::before {
+}
+
+button.learn-more::before {
     position: absolute;
     content: '';
     width: 100%;
@@ -99,60 +113,101 @@ button {
     -webkit-transform: translate3d(0, 0.75em, -1em);
     transform: translate3d(0, 0.75em, -1em);
     transition: transform 150ms cubic-bezier(0, 0, 0.58, 1), box-shadow 150ms cubic-bezier(0, 0, 0.58, 1), -webkit-transform 150ms cubic-bezier(0, 0, 0.58, 1), -webkit-box-shadow 150ms cubic-bezier(0, 0, 0.58, 1);
-  }
-  
-  button.learn-more:hover {
+}
+
+button.learn-more:hover {
     background: #ffeba5;
     -webkit-transform: translate(0, 0.25em);
     transform: translate(0, 0.25em);
     color: #1d1c49;
-  
-  }
-  
-  button.learn-more:hover::before {
+
+}
+
+button.learn-more:hover::before {
     -webkit-box-shadow: 0 0 0 2px #ffeba5, 0 0.5em 0 0 #ffeba5;
     box-shadow: 0 0 0 2px #ffeba5, 0 0.5em 0 0 #ffeba5;
     -webkit-transform: translate3d(0, 0.5em, -1em);
     transform: translate3d(0, 0.5em, -1em);
-  }
-  
-  button.learn-more:active {
+}
+
+button.learn-more:active {
     background: #ffeba5;
     -webkit-transform: translate(0em, 0.75em);
     transform: translate(0em, 0.75em);
-  
-  }
-  
-  button.learn-more:active::before {
+
+}
+
+button.learn-more:active::before {
     -webkit-box-shadow: 0 0 0 2px #ffeba5, 0 0 #ffeba5;
     box-shadow: 0 0 0 2px #ffeba5, 0 0 #ffeba5;
     -webkit-transform: translate3d(0, 0, -1em);
     transform: translate3d(0, 0, -1em);
-  }
+}
+
 .bot-button {
-  position: fixed;
-  bottom: 30px;
-  right: 30px;
-  padding: 15px 25px;
-  border-radius: 50px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  transition: all 0.3s ease;
-  z-index: 1000;
-  box-shadow: 0 4px 12px rgba(0,123,255,0.2);
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    padding: 15px 25px;
+    border-radius: 50px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+    z-index: 1000;
+    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.2);
 }
 
 .bot-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(0,123,255,0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 123, 255, 0.3);
 }
 
 .bot-button.speaking {
-  background-color: #dc3545;
-  animation: pulse 2s infinite;
+    background-color: #dc3545;
+    animation: pulse 2s infinite;
+}
+
+.sabermas {
+    font-size: 18px;
+    color: #000;
+    font-family: inherit;
+    font-weight: 800;
+    cursor: pointer;
+    position: relative;
+    border: none;
+    background: none;
+    text-transform: uppercase;
+    transition-timing-function: cubic-bezier(0.25, 0.8, 0.25, 1);
+    transition-duration: 400ms;
+    transition-property: color;
+}
+
+.sabermas:focus,
+.sabermas:hover {
+    color: #000;
+}
+
+.sabermas:focus:after,
+.sabermas:hover:after {
+    width: 100%;
+    left: 0%;
+}
+
+.sabermas:after {
+    content: "";
+    pointer-events: none;
+    bottom: -2px;
+    left: 50%;
+    position: absolute;
+    width: 0%;
+    height: 2px;
+    background-color: #000;
+    transition-timing-function: cubic-bezier(0.25, 0.8, 0.25, 1);
+    transition-duration: 400ms;
+    transition-property: width, left;
 }
