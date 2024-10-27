@@ -1,0 +1,120 @@
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.85);
+    /* Aumentar opacidad */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+
+.modal-content {
+    background-color: white;
+    padding: 20px;
+    height: 100%;
+    display: flex;
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.modal-content img {
+    width: 90%;
+}
+
+/* Animación para agrandar el texto completo */
+@keyframes scaleText {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.3);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Pestañeo para la primera "O" */
+@keyframes wink {
+
+    0%,
+    100% {
+        transform: scaleY(1);
+    }
+
+    50% {
+        transform: scaleY(0);
+    }
+
+    /* Comprime la O verticalmente */
+}
+
+@keyframes drop {
+    0% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(80px);
+    }
+
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+.lava-lamp {
+    position: relative;
+    margin-top: 50px;
+    width: 50px;
+    height: 100px;
+    background: #00022f;
+    border-radius: 25px;
+    overflow: hidden;
+}
+
+.bubble {
+    position: absolute;
+    top: 0;
+    width: 20px;
+    height: 20px;
+    background: #0241fe;
+    border-radius: 50%;
+    left: 15px;
+    animation: drop 5s ease-in-out infinite;
+}
+
+.bubble1 {
+    position: absolute;
+    top: 0;
+    width: 20px;
+    height: 20px;
+    background: #f2fe02;
+
+    border-radius: 50%;
+    left: 1px;
+    animation: drop 3s ease-in-out infinite;
+}
+
+.bubble2 {
+    position: absolute;
+    top: 0;
+    width: 20px;
+    height: 20px;
+    background: #fe0202;
+    border-radius: 50%;
+    left: 30px;
+    animation: drop 4s ease-in-out infinite;
+}
+

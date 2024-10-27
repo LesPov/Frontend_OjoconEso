@@ -1,0 +1,41 @@
+<div class="body">
+    <img class="imagen_logo1" src="../../../../../assets/img/denuncias/denuncias_anonimas/denunciasvirtuales.png" alt="">
+    <img class="imagen_logo" src="../../../../../assets/img/denuncias/denuncias_anonimas/newondo.png" alt="">
+
+    <div class="container_content">
+        <button type="button" class="buttonDo"
+        (click)="showwarnig()">Denuncia Oficial</button>
+        <button type="button" class="buttonDa"
+            (click)="openModal('Denuncia Anónima', 'tel:123', '/anonima')">Denuncia Anónima</button>
+        <button type="button" class="buttonVg"
+        (click)="showwarnig()">
+            Violencia de género <i class='bx bx-male-female bx-flashing'></i>
+        </button>
+        <div class="logaout">
+            <a class="login" (click)="showwarnig()">Iniciar sesión <i class='bx bx-right-arrow-alt'></i></a>
+            <a class="register"(click)="showwarnig()">Regístrate <i class='bx bx-right-arrow-alt'></i></a>
+        </div>
+        <a (click)="showwarnig()">¿Cómo hacer una denuncia? <i class='bx bx-help-circle'></i></a>
+    </div>
+
+    <div *ngIf="currentModal" class="modal">
+        <div class="modal-content">
+            <span class="close" (click)="closeModal()">&times;</span>
+            <div class="content">
+                <!-- Aquí va el botón animado -->
+                <div class="warning-icon">
+                    <span>!</span>
+                </div>
+                <p>Esta aplicación no es para reportar situaciones de emergencia. Si se encuentra en peligro inminente
+                    <br>
+                    <span>llame al 123.</span>
+                </p>
+                <div class="buttons_modal">
+                     <button class="call" (click)="makeCall()">Llamar 123</button>
+                    <button class="learn-more" (click)="navigateToRoute()">Continuar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
