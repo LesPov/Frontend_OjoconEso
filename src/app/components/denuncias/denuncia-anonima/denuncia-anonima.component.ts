@@ -16,9 +16,10 @@ import { BotInfoService } from '../shared/bot/botInfoDenuncias';
 export class DenunciaAnonimaComponent implements OnInit {
 
   public infoListAnonima: string[] = [
-"En esta sección podrás realizar denuncias anónimas. Recuerda que una denuncia anónima permite reportar situaciones sin necesidad de revelar tu identidad, protegiendo tu seguridad.",
-"Te guiaremos paso a paso en el proceso para que puedas completar toda la información necesaria.",
-"Recuerda que el proceso tiene varias etapas como el tipo de denuncia, evidencias, dirección delincidente,entre otras.",
+    "Bienvenido alimalaha ",
+    "En esta sección podrás realizar denuncias anónimas. Recuerda que una denuncia anónima permite reportar situaciones sin necesidad de revelar tu identidad, protegiendo tu seguridad.",
+    "Te guiaremos paso a paso en el proceso para que puedas completar toda la información necesaria.",
+    "Recuerda que el proceso tiene varias etapas como el tipo de denuncia, evidencias, dirección delincidente,entre otras.",
   ];
 
   constructor(
@@ -35,7 +36,7 @@ export class DenunciaAnonimaComponent implements OnInit {
   }
 
   scrollToParagraph(index: number): void {
-    const paragraphs = document.querySelectorAll('.info_item p');
+    const paragraphs = document.querySelectorAll('p');
     if (paragraphs[index]) {
       paragraphs[index].scrollIntoView({ behavior: 'smooth', block: 'center' });
     }

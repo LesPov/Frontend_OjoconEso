@@ -23,7 +23,10 @@ h1 {
     justify-content: center;
     gap: 10px;
 }
-
+#info1{
+    font-size: 25px;
+    font-weight: 700;
+}
 .info_item {
     display: flex;
     flex-direction: column;
