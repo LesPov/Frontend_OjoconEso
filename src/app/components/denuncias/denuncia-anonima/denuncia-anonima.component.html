@@ -1,1 +1,36 @@
-<p>denuncia-anonima works!</p>
+<app-header [title]="'Denuncias Anónimas'" [componentName]="'anonima'">
+</app-header>
+
+<div class="denuncias_anonimas">
+
+    <!-- Sección Informativa -->
+    <section class="info_section">
+        <h1>Como denunciar anonimamente</h1>
+        <div class="info_item">
+            <img src="https://cdn.prod.website-files.com/64c73d04a946980a4476537e/64d455088454ba4abb0cf9cc_Late%20for%20Class.svg" alt="Ícono Informativo"
+                class="icon" />
+            <p>En esta sección podrás realizar denuncias anónimas. Recuerda que una denuncia anónima permite reportar
+                situaciones sin necesidad de revelar tu identidad, protegiendo tu seguridad.</p>
+        </div>
+        <div class="info_item">
+            <img src="https://cdn.prod.website-files.com/64c73d04a946980a4476537e/64d456bfc7f9c0552d104382_Gamestation.svg" alt="Ícono Informativo"
+                class="icon" />
+            <p>Te guiaremos paso a paso en el proceso para que puedas completar toda la información necesaria.</p>
+
+        </div>
+        <div class="info_item">
+            <img src="https://cdn.prod.website-files.com/64c73d04a946980a4476537e/64d452e5aed374e1f7ce8cac_Reflecting.svg" 
+                alt="Ícono Informativo" class="icon3" />
+            <p>Recuerda que el proceso tiene varias etapas como el tipo de denuncia, evidencias, dirección del
+                incidente,
+                entre otras.</p>
+        </div>
+    </section>
+
+    <div class="container_content">
+
+        <button class="learn-more"(click)="goToConsulta()" >Consultar</button>
+    <button class="learn-more" (click)="goToCrear()">Crear</button>
+        <button class="sabermas">Saber más</button>
+    </div>
+</div>
