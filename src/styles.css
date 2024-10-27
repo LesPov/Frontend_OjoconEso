@@ -1,1 +1,49 @@
 /* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Chau+Philomene+One:ital@0;1&display=swap');
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: "Chau Philomene One", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+body {
+    width: auto;
+    height: auto;
+    background: var(--background_body);
+}
+html{
+    overflow-y: auto;
+    scrollbar-width: none;
+
+}
+
+:root {
+    /* ///header//// */
+    --background_header: #1d1c49;
+    --background_body: #ffffff;
+
+
+}
+
+
+
+/* //////////// Dark Tema ///////////////////// */
+body.dark-theme {
+
+    --background_header: #1d1c49;
+    --background_body: #000000;
+
+
+
+
+
+    /* //////////////header//////////// */
+
+
+    /* ///////////////////////about/////////////// */
+
+}
