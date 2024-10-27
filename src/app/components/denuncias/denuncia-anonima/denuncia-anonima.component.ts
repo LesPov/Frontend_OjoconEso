@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { HeaderComponent } from './header/header.component';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { BotInfoService } from '../shared/bot/botInfoDenuncias';
 
 @Component({
   selector: 'app-denuncia-anonima',
@@ -13,17 +14,37 @@ import { ToastrService } from 'ngx-toastr';
   styleUrl: './denuncia-anonima.component.css'
 })
 export class DenunciaAnonimaComponent implements OnInit {
-  claveUnica: string = '';  // Variable para almacenar la clave ingresada
-  error: string | null = null;
 
-  constructor(private router: Router,  private toastr: ToastrService) { }
+  public infoListAnonima: string[] = [
+"En esta sección podrás realizar denuncias anónimas. Recuerda que una denuncia anónima permite reportar situaciones sin necesidad de revelar tu identidad, protegiendo tu seguridad.",
+"Te guiaremos paso a paso en el proceso para que puedas completar toda la información necesaria.",
+"Recuerda que el proceso tiene varias etapas como el tipo de denuncia, evidencias, dirección delincidente,entre otras.",
+  ];
 
-  ngOnInit(): void { }
-// Método para navegar a la ruta de consulta
-goToConsulta() {
-  this.router.navigate(['/consultar']);
-}
-  // Método para navegar a la ruta de Crear
+  constructor(
+    private router: Router,
+    private toastr: ToastrService,
+    private botInfoService: BotInfoService
+  ) { }
+
+  ngOnInit(): void {
+    this.botInfoService.setInfoList(this.infoListAnonima);
+    this.botInfoService.getScrollIndex().subscribe(index => {
+      this.scrollToParagraph(index);
+    });
+  }
+
+  scrollToParagraph(index: number): void {
+    const paragraphs = document.querySelectorAll('.info_item p');
+    if (paragraphs[index]) {
+      paragraphs[index].scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }
+
+  goToConsulta() {
+    this.router.navigate(['/consultar']);
+  }
+
   goToCrear() {
     this.router.navigate(['/tipos']);
   }

@@ -16,6 +16,7 @@ export class BotInfoService {
 
   // Índice para rastrear la frase actual en la lista de información
   private infoIndexSubject = new BehaviorSubject<number>(0);
+  private scrollIndexSubject = new BehaviorSubject<number>(0);  // Nueva propiedad para emitir el índice
 
   // Indicadores de estado para pausar y controlar la locución
   private isPaused = false;
@@ -59,18 +60,20 @@ export class BotInfoService {
    * Si llega al final de la lista, vuelve al principio.
    * @returns string - La frase que debe ser leída
    */
-  getNextInfo(): string {
+ 
+ getNextInfo(): string {
     const currentIndex = this.infoIndexSubject.value;
-
-    if (this.currentInfoList.length === 0) {
-      return "No hay información disponible.";
-    }
+    if (this.currentInfoList.length === 0) return "No hay información disponible.";
 
     const info = this.currentInfoList[currentIndex];
-    const nextIndex = (currentIndex + 1) % this.currentInfoList.length;
-    this.infoIndexSubject.next(nextIndex);
-
+    this.scrollIndexSubject.next(currentIndex);  // Emite el índice actual al iniciar el párrafo
+    this.infoIndexSubject.next((currentIndex + 1) % this.currentInfoList.length);
+    
     return info;
+}
+
+  getScrollIndex(): Observable<number> {
+    return this.scrollIndexSubject.asObservable();
   }
 
   /**

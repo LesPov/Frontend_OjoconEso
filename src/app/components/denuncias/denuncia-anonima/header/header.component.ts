@@ -1,8 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { applyTheme, getCurrentIcon, getCurrentTheme } from '../utils/headers/theme-utils';
-import { handleSpeak } from '../utils/headers/bot-utils';
 import { Subscription } from 'rxjs';
-import { toggleSpeakingAnimation, activatePulseAnimation } from '../utils/headers/animation-utils';
 import { BotInfoService } from '../../shared/bot/botInfoDenuncias';
 import { CommonModule, Location } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -14,12 +11,15 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './header.component.html',
   styleUrl: './header.component.css'
 })
+
 export class HeaderComponent implements OnInit, OnDestroy {
   @Input() title: string = '';
   @Input() showSpeakButton: boolean = false;
   @Input() componentName: string = '';
-  @Input() tipoDenuncia: string | null = null;
+  private darkTheme = 'dark-theme';
+  @Input() tipoDenuncia: string | null = null;  // Nuevo input para el tipo de denuncia
 
+  private iconTheme = 'uil-sun';
   isSpeaking: boolean = false;
   private subscription: Subscription | undefined;
 
@@ -31,39 +31,111 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.botInfoService.setCurrentComponent(this.componentName);
     this.subscription = this.botInfoService.getCurrentComponent().subscribe(
-      component => console.log('Componente actual:', component)
+      component => {
+        console.log('Componente actual:', component);
+      }
     );
   }
 
   ngOnDestroy() {
-    this.subscription?.unsubscribe();
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 
   goBack(): void {
     this.location.back();
   }
-
+  // Función para mostrar título específico cuando el componente sea 'subtipos'
   getTitle(): string {
     return this.componentName === 'subtipos' && this.tipoDenuncia
-      ? `Subtipos de ${this.tipoDenuncia}`
+      ? `Subtipos de ${this.tipoDenuncia}`  // Muestra el tipo de denuncia en el header
       : this.title;
   }
+  speak(): void {
+    const iconElement = document.querySelector('.bx-user-voice');
+    
+    if (this.isSpeaking) {
+      this.botInfoService.cancelSpeak();
+      this.isSpeaking = false;
+      this.toggleSpeakingAnimation(false);
+      iconElement?.classList.remove('speaking-active');
+      this.activatePulseAnimation();
+    } else if (this.componentName === 'anonima') {  // Verifica si es 'anonima'
+      const nextInfo = this.botInfoService.getNextInfo();
+      this.isSpeaking = true;
+      this.toggleSpeakingAnimation(true);
+      iconElement?.classList.add('speaking-active');
+      
+      this.botInfoService.speak(nextInfo)
+        .then(() => {
+          this.isSpeaking = false;
+          this.toggleSpeakingAnimation(false);
+          iconElement?.classList.remove('speaking-active');
+          this.activatePulseAnimation();
+        })
+        .catch((error) => {
+          console.error('Error al hablar:', error);
+          this.isSpeaking = false;
+          this.toggleSpeakingAnimation(false);
+          iconElement?.classList.remove('speaking-active');
+          this.activatePulseAnimation();
+        });
+    }
+  }
+  
 
-  async speak(): Promise<void> {
-    this.isSpeaking = !this.isSpeaking;
-    await handleSpeak(this.botInfoService, this.isSpeaking, toggleSpeakingAnimation, activatePulseAnimation);
+  activatePulseAnimation(): void {
+    const element = document.querySelector('.cuadro');
+    if (element) {
+      element.classList.add('pulse-animation');  // Activamos la animación de pulso
+    }
+  }
+
+
+  toggleSpeakingAnimation(isSpeaking: boolean): void {
+    const element = document.querySelector('.cuadro');
+    if (element) {
+      if (isSpeaking) {
+        element.classList.add('speaking');
+      } else {
+        element.classList.remove('speaking');
+      }
+    }
   }
 
   getHeaderClass(): string {
     return this.componentName === 'subtipos' ? 'header-subtipos' : '';
   }
 
+
   toggleTheme(): void {
-    const currentTheme = getCurrentTheme();
-    const currentIcon = getCurrentIcon();
-    applyTheme(currentTheme === 'dark' ? 'light' : 'dark', currentIcon === 'uil-moon' ? 'uil-sun' : 'uil-moon');
+    const currentTheme = this.getCurrentTheme();
+    const currentIcon = this.getCurrentIcon();
+
+    this.applyTheme(currentTheme === 'dark' ? 'light' : 'dark', currentIcon === 'uil-moon' ? 'uil-sun' : 'uil-moon');
 
     localStorage.setItem('selected-theme', currentTheme === 'dark' ? 'light' : 'dark');
     localStorage.setItem('selected-icon', currentIcon === 'uil-moon' ? 'uil-sun' : 'uil-moon');
+  }
+
+  private getCurrentTheme(): string {
+    return document.body.classList.contains(this.darkTheme) ? 'dark' : 'light';
+  }
+
+  private getCurrentIcon(): string {
+    const themeButton = document.getElementById('theme-button');
+    return themeButton?.classList.contains(this.iconTheme) ? 'uil-moon' : 'uil-sun';
+  }
+  private applyTheme(theme: string, icon: string): void {
+    document.body.classList[theme === 'dark' ? 'add' : 'remove'](this.darkTheme);
+    this.getElementByIdAndApplyClass('theme-button', this.iconTheme, icon === 'uil-moon');
+  }
+
+  private getElementByIdAndApplyClass(id: string, className: string, shouldAdd: boolean): void {
+    const element = document.getElementById(id);
+    if (element) {
+      element.classList[shouldAdd ? 'add' : 'remove'](className);
+    }
   }
 }
