@@ -30,7 +30,6 @@ export class TiposDeDenunciaComponent implements OnInit {
 
 
   private infoListAnonima: string[] = [
-  
     "Estás en la sección de denuncias anónimas. Aquí puedes reportar sin revelar tu identidad.",
     "Estos son los tipos de denuncias que tenemos disponibles. Selecciona una para obtener más detalles.",
     "Haz clic en la imagen de cualquier denuncia para consultar más información sobre ella.",
@@ -85,7 +84,8 @@ export class TiposDeDenunciaComponent implements OnInit {
     if (denuncia) {
       const name = denuncia.nombre;
       const description = denuncia.descripcion || 'No hay descripción disponible';
-  
+      const text = this.botInfoService.getNextInfo(); // false por defecto, accede a la lista de denuncias
+
       this.botInfoService.cancelSpeak();
   
       this.isSpeaking = true;

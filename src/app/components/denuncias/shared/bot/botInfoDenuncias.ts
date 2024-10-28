@@ -8,6 +8,7 @@ declare var responsiveVoice: any;
 })
 export class BotInfoService {
   private currentInfoList: string[] = [];
+  private headerInfoList: string[] = []; // Lista específica para el encabezado
   private currentComponentSubject = new BehaviorSubject<string>('anonima');
   private infoIndexSubject = new BehaviorSubject<number>(0);
   private scrollIndexSubject = new BehaviorSubject<number>(0);
@@ -21,6 +22,7 @@ export class BotInfoService {
   }
 
   setCurrentComponent(component: string): void {
+    
     this.currentComponentSubject.next(component);
     this.infoIndexSubject.next(0);
   }
@@ -31,6 +33,11 @@ export class BotInfoService {
 
   setInfoList(infoList: string[]): void {
     this.currentInfoList = infoList;
+    this.infoIndexSubject.next(0);
+  }
+
+  setHeaderInfoList(infoList: string[]): void {
+    this.headerInfoList = infoList;
     this.infoIndexSubject.next(0);
   }
 

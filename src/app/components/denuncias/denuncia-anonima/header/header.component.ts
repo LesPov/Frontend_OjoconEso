@@ -50,6 +50,21 @@ export class HeaderComponent implements OnInit, OnDestroy {
       ? `Subtipos de ${this.tipoDenuncia}`  // Muestra el tipo de denuncia en el header
       : this.title;
   }
+
+
+  speakHeader(): void {
+    const iconElement = document.querySelector('.bx-user-voice');
+
+    const text = this.botInfoService.getNextInfo(); // true para obtener la info del header
+    this.botInfoService.speak(text)
+      .then(() => {
+        this.isSpeaking = false;
+      })
+      .catch(error => {
+        console.error('Error al hablar:', error);
+        this.isSpeaking = false;
+      });
+  }
   speak(): void {
     const iconElement = document.querySelector('.bx-user-voice');
   
@@ -63,7 +78,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.toggleSpeakingAnimation(true);
       iconElement?.classList.add('speaking-active');
   
-      // Obtener el siguiente mensaje de la lista
       const text = this.botInfoService.getNextInfo();
   
       this.botInfoService.speak(text)
@@ -80,7 +94,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
         });
     }
   }
-  
   
 
   activatePulseAnimation(): void {
