@@ -9,6 +9,7 @@ import { HeaderComponent } from '../../header/header.component';
 import { TipoDenunciaInterface } from '../../interface/tipoDenunciaInterface';
 import { DenunciasService } from '../../service/denuncias.service';
 import { DenunciaStorageService } from '../../service/denunciaStorage.service';
+import { environment } from '../../../../../../environments/environment';
 
 @Component({
   selector: 'app-tipos-de-denuncia',
@@ -109,7 +110,10 @@ export class TiposDeDenunciaComponent implements OnInit {
   }
   
   getImageUrl(flagImage: string): string {
-    return `assets/img/demandas/tipo_demandas/${flagImage}`;
+    if (!flagImage) {
+      return '../../../../../../assets/img/default-denuncia.png'; // Imagen por defecto
+    }
+    return `${environment.endpoint}uploads/${flagImage}`;
   }
 
   handleContinue(): void {
