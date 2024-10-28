@@ -18,9 +18,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   @Input() componentName: string = '';
   private darkTheme = 'dark-theme';
   @Input() tipoDenuncia: string | null = null;  // Nuevo input para el tipo de denuncia
-
-  private iconTheme = 'uil-sun';
-  isSpeaking: boolean = false;
+  private iconTheme = 'uil-sun';  isSpeaking: boolean = false;
   private subscription: Subscription | undefined;
 
   constructor(
@@ -54,35 +52,35 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
   speak(): void {
     const iconElement = document.querySelector('.bx-user-voice');
-    
+  
     if (this.isSpeaking) {
       this.botInfoService.cancelSpeak();
       this.isSpeaking = false;
       this.toggleSpeakingAnimation(false);
       iconElement?.classList.remove('speaking-active');
-      this.activatePulseAnimation();
-    } else if (this.componentName === 'anonima') {  // Verifica si es 'anonima'
-      const nextInfo = this.botInfoService.getNextInfo();
+    } else {
       this.isSpeaking = true;
       this.toggleSpeakingAnimation(true);
       iconElement?.classList.add('speaking-active');
-      
-      this.botInfoService.speak(nextInfo)
+  
+      // Obtener el siguiente mensaje de la lista
+      const text = this.botInfoService.getNextInfo();
+  
+      this.botInfoService.speak(text)
         .then(() => {
           this.isSpeaking = false;
           this.toggleSpeakingAnimation(false);
           iconElement?.classList.remove('speaking-active');
-          this.activatePulseAnimation();
         })
-        .catch((error) => {
+        .catch(error => {
           console.error('Error al hablar:', error);
           this.isSpeaking = false;
           this.toggleSpeakingAnimation(false);
           iconElement?.classList.remove('speaking-active');
-          this.activatePulseAnimation();
         });
     }
   }
+  
   
 
   activatePulseAnimation(): void {
@@ -93,16 +91,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
 
-  toggleSpeakingAnimation(isSpeaking: boolean): void {
-    const element = document.querySelector('.cuadro');
-    if (element) {
-      if (isSpeaking) {
-        element.classList.add('speaking');
-      } else {
-        element.classList.remove('speaking');
-      }
-    }
+  toggleSpeakingAnimation(isSpeaking: boolean) {
+    const iconElement = document.querySelector('.bx-user-voice');
+    iconElement?.classList.toggle('speaking-active', isSpeaking);
   }
+  
 
   getHeaderClass(): string {
     return this.componentName === 'subtipos' ? 'header-subtipos' : '';

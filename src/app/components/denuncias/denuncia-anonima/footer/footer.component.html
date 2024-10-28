@@ -1,1 +1,16 @@
-<p>footer works!</p>
+<div class="footer-container">
+    <!-- footer.component.html -->
+    <div class="dots-container" *ngIf="showDots">
+      <div class="dot"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
+    </div>
+  <!-- Contador de pasos solo se muestra cuando 'showStepCounter' es true -->
+  <div class="step-counter" *ngIf="showStepCounter">
+    {{ currentStep }} / {{ totalSteps }}
+  </div>
+    <button (click)="continuarPaso()" class="continue-btn" [class.active]="denunciaSeleccionada"
+      [disabled]="!denunciaSeleccionada">
+      Continuar <i class='bx bx-right-arrow-alt' [class.bx-tada]="denunciaSeleccionada"></i>
+    </button>
+  </div>

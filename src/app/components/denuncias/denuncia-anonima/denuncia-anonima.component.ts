@@ -27,7 +27,9 @@ export class DenunciaAnonimaComponent implements OnInit {
     private toastr: ToastrService,
     private botInfoService: BotInfoService
   ) { }
-
+  showwarnig(): void {
+    this.toastr.warning('En próximas actualizaciones se agregará.', 'Warning');
+  }
   ngOnInit(): void {
     this.botInfoService.setInfoList(this.infoListAnonima);
     this.botInfoService.getScrollIndex().subscribe(index => {
@@ -43,10 +45,10 @@ export class DenunciaAnonimaComponent implements OnInit {
   }
 
   goToConsulta() {
-    this.router.navigate(['/consultar']);
+    this.router.navigate(['/consulta']);
   }
 
   goToCrear() {
-    this.router.navigate(['/tipos']);
+    this.router.navigate(['/tipos_de_denuncia']);
   }
 }
