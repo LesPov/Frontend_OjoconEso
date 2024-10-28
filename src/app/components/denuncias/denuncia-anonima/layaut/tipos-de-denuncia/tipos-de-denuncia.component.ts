@@ -84,7 +84,6 @@ export class TiposDeDenunciaComponent implements OnInit {
     if (denuncia) {
       const name = denuncia.nombre;
       const description = denuncia.descripcion || 'No hay descripción disponible';
-      const text = this.botInfoService.getNextInfo(); // false por defecto, accede a la lista de denuncias
 
       this.botInfoService.cancelSpeak();
   
@@ -92,9 +91,7 @@ export class TiposDeDenunciaComponent implements OnInit {
       this.speakingIndex = index;
       this.stopPulse(index);
   
-      // Añadir la lista específica de `tipos` en el BotInfoService
-      this.botInfoService.setInfoList([name, description]);
-  
+      
       this.botInfoService.speak(name)
         .then(() => this.botInfoService.speak(description))
         .then(() => {
@@ -127,7 +124,7 @@ export class TiposDeDenunciaComponent implements OnInit {
       // Guardar en el storage
       this.denunciaStorage.setTipoDenuncia(selectedDenuncia.nombre);
       // Navegar
-      this.router.navigate(['/subtipos', { nombreTipoDenuncia: selectedDenuncia.nombre }]);
+      this.router.navigate(['../subtipos_de_denuncia', { nombreTipoDenuncia: selectedDenuncia.nombre }]);
     }
   }
   
