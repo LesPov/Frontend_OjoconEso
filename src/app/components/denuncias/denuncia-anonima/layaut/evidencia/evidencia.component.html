@@ -1,0 +1,60 @@
+<!-- evidencia.component.html -->
+<app-header [title]="'Denuncias Anónimas'" [tipoDenuncia]="subtipoDenuncia" [showSpeakButton]="true"
+    [componentName]="'evidencia'">
+</app-header>
+
+<div class="container">
+    <div class="relato">
+        <p>Relato de lo que pasó:</p>
+        <textarea class="descripcion" placeholder="Agrega el detalle de cómo ocurrieron los hechos"
+            (input)="onDescripcionChange($event)"></textarea>
+
+        <!-- Error message -->
+        <div *ngIf="showError" class="error-message" >
+            La descripción debe contener al menos {{minimumWords}} palabras.
+        </div>
+
+     
+    </div>
+
+    <!-- Sección para subir contenido multimedia -->
+    <div class="multimedia">
+        <p>Puedes agregar un video o una imagen:</p>
+        <div class="multimedia_content">
+            <p>Oprime el icono para agregar evidencia</p>
+            <i class='bx bxs-image-add bx-tada' (click)="triggerFileUpload()"></i>
+        </div>
+
+        <!-- Input de archivo oculto -->
+        <input type="file" id="fileInput" accept="image/*,video/*" (change)="onFileSelected($event)"
+            style="display: none;" multiple>
+
+        <!-- Vista previa de archivos -->
+        <div *ngIf="selectedMultimedia.length > 0" class="preview">
+            <p>Archivo seleccionado</p>
+            <div *ngFor="let file of selectedMultimedia" class="file-preview">
+                <img *ngIf="isImage(file)" [src]="getFileUrl(file)" alt="Imagen seleccionada">
+                <video *ngIf="isVideo(file)" [src]="getFileUrl(file)" controls></video>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sección de grabación de audio -->
+    <div class="multimedia_audio">
+        <p>Puedes agregar un audio de 1 minuto</p>
+        <div class="multimedia_content_audio">
+            <p>Oprime el icono para grabar audio</p>
+            <i class='bx bx-microphone' [class.recording]="isRecording" (click)="toggleRecording()">
+            </i>
+        </div>
+        <!-- Reproductor de audio -->
+        <div *ngIf="audioUrl" class="audio-preview">
+            <p>Audio grabado:</p>
+            <audio [src]="audioUrl" controls></audio>
+        </div>
+    </div>
+</div>
+
+<app-footer [currentStep]="currentStep" [totalSteps]="totalSteps" [showStepCounter]="true"
+[denunciaSeleccionada]="descripcion.trim().length > 0 && wordCount >= minimumWords" (continuar)="handleContinue()">
+</app-footer>

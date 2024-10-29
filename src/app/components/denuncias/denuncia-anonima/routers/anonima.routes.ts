@@ -17,4 +17,16 @@ export const anonimoRoutes: Routes = [
     path: 'subtipos_de_denuncia',
     loadComponent: () => import('../layaut/subtipos-de-denuncia/subtipos-de-denuncia.component').then(m => m.SubtiposDeDenunciaComponent),
   },
+  {
+    path: 'evidencia',
+    loadComponent: () => import('../layaut/evidencia/evidencia.component').then(m => m.EvidenciaComponent),
+  },
+  {
+    path: 'ubicacion',
+    loadComponent: () => import('../layaut/ubicacion/ubicacion.component').then(m => m.UbicacionComponent),
+  },
+  {
+    path: 'resumen_de_denunacia_anonima',
+    loadComponent: () => import('../layaut/resumen/resumen.component').then(m => m.ResumenComponent),
+  },
 ];

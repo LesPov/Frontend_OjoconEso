@@ -1,0 +1,63 @@
+<app-header [title]="'Denuncias Anónimas'" [showSpeakButton]="true" [componentName]="'resumen'"></app-header>
+
+<div class="container">
+    <h2 class="title">Resumen de la Denuncia</h2>
+
+    <div class="content">
+        <!-- Tipo de Denuncia -->
+        <div class="field">
+            <label class="label">Tipo de Denuncia:</label>
+            <input type="text" [value]="datosResumen.nombreTipo || 'No especificado'" readonly class="input_full">
+        </div>
+
+        <!-- Subtipo de Denuncia -->
+        <div class="field">
+            <label class="label">Subtipo de Denuncia:</label>
+            <input type="text" [value]="datosResumen.nombreSubtipo || 'No especificado'" readonly class="input_full">
+        </div>
+
+        <!-- Descripción -->
+        <div class="field">
+            <label class="label">Descripción:</label>
+            <textarea [value]="datosResumen.descripcion || 'Sin descripción'" readonly class="textarea"></textarea>
+        </div>
+
+        <!-- Ubicación -->
+        <div class="field">
+            <label class="label">Ubicación:</label>
+            <input type="text" [value]="datosResumen.direccion || 'No especificada'" readonly class="input_full">
+        </div>
+
+        <!-- Evidencias -->
+        <div class="field">
+            <label class="label">Evidencias adjuntas:</label>
+            <div *ngIf="datosResumen.pruebas" class="info">
+                Archivos multimedia
+            </div>
+            <div *ngIf="datosResumen.audio" class="info">
+                Audio
+            </div>
+            <div *ngIf="!datosResumen.pruebas && !datosResumen.audio" class="info">
+                No se adjuntaron evidencias
+            </div>
+        </div>
+    </div>
+</div>
+
+<app-footer [currentStep]="currentStep" [totalSteps]="totalSteps" [showStepCounter]="true"
+    [denunciaSeleccionada]="isContinueButtonEnabled()" (continuar)="handleContinue()">
+</app-footer>
+
+<!-- Modal de éxito -->
+<div *ngIf="showModal" class="modal">
+    <div class="modal-content">
+        <h1>Denuncia enviada con éxito</h1>
+        <p>Tu denuncia ha sido registrada con la clave de radicado:</p>
+        <div class="clave-unica">
+            {{ claveUnica }}
+        </div>
+        <p>Por favor, guarda esta clave para futuras consultas.</p>
+        <button class="learn-more" (click)="closeModal()">Continuar
+        </button>
+    </div>
+</div>

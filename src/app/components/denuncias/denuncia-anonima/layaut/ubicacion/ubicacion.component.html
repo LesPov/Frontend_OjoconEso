@@ -1,0 +1,31 @@
+<app-header 
+  [title]="'Denuncias Anónimas'"
+  [showSpeakButton]="true" 
+  [componentName]="'ubicacion'">
+</app-header>
+
+<div class="container">
+  <div class="map-container">
+    <!-- Input para mostrar la dirección -->
+    <div class="ubicacion-input">
+      <label for="direccion">Ubicación seleccionada:</label>
+      <input 
+        type="text" 
+        id="direccion" 
+        [value]="direccionSeleccionada" 
+        readonly
+        [class.loading]="isLoading"
+        placeholder="Selecciona un punto en el mapa">
+    </div>
+
+    <div id="map"></div>
+  </div>
+</div>
+
+<app-footer 
+  [currentStep]="currentStep"
+  [totalSteps]="totalSteps"
+  [showStepCounter]="true"
+  [denunciaSeleccionada]="selectedLocation !== null" 
+  (continuar)="handleContinue()">
+</app-footer>
