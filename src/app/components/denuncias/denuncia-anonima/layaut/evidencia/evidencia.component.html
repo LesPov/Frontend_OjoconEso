@@ -19,9 +19,8 @@
 
     <!-- Sección para subir contenido multimedia -->
     <div class="multimedia">
-        <div class="camera-container" *ngIf="isCameraOpen">
-            <video #videoElement autoplay playsinline></video>
-            <canvas #canvasElement style="display: none;"></canvas>
+        <div *ngIf="showCamera" class="camera-container">
+            <video #cameraFeed id="cameraFeed" autoplay playsinline></video>
             <div class="camera-controls">
               <button class="capture-btn" (click)="capturePhoto()">
                 <i class='bx bx-camera'></i>
@@ -32,10 +31,10 @@
             </div>
           </div>
           
-          <!-- Update your existing camera icon to use toggleCamera -->
+          <!-- Update your existing multimedia content section -->
           <div class="multimedia_content">
             <p>Oprime el icono para agregar evidencia</p>
-            <i class='bx bx-camera' (click)="toggleCamera()"></i>
+            <i class='bx bx-camera' (click)="initCamera()"></i>
             <i class='bx bxs-image-add bx-tada' (click)="triggerFileUpload()"></i>
           </div>
 
