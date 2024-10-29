@@ -20,7 +20,7 @@
     <!-- Sección para subir contenido multimedia -->
     <div class="multimedia">
         <div *ngIf="showCamera" class="camera-container">
-            <video #cameraFeed id="cameraFeed" autoplay playsinline></video>
+            <video #cameraFeed id="cameraFeed" class="cameraFeed" autoplay playsinline></video>
             <div class="camera-controls">
               <button class="capture-btn" (click)="capturePhoto()">
               </button>
