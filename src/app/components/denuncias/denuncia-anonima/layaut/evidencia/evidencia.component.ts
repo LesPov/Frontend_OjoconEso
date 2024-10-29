@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -19,6 +19,9 @@ import { DenunciaStorageService } from '../../service/denunciaStorage.service';
 
 })
 export class EvidenciaComponent implements OnInit {
+  @ViewChild('videoElement') videoElement!: ElementRef<HTMLVideoElement>;
+  @ViewChild('canvasElement') canvasElement!: ElementRef<HTMLCanvasElement>;
+
   subtipoDenuncia: string | null = null;
   currentStep = 1;
   totalSteps = 3;
@@ -35,6 +38,9 @@ export class EvidenciaComponent implements OnInit {
   recordingTimeout: any;
   audioBlob: Blob | null = null;
   currentStream: MediaStream | null = null;
+   // New camera-related properties
+   isCameraOpen: boolean = false;
+   cameraStream: MediaStream | null = null;
   // Nueva lista de mensajes
   private infoEvidenciaList: string[] = [
     "Bienvenido a la sección de evidencia. Aquí podrás subir archivos multimedia relacionados con tu denuncia.",
@@ -62,6 +68,81 @@ export class EvidenciaComponent implements OnInit {
     });
     // Asignar la nueva lista de mensajes al bot
     this.botInfoService.setInfoList(this.infoEvidenciaList);
+  }
+  
+  async toggleCamera() {
+    if (this.isCameraOpen) {
+      this.closeCamera();
+    } else {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ 
+          video: { facingMode: 'environment' }, 
+          audio: false 
+        });
+        
+        this.cameraStream = stream;
+        this.isCameraOpen = true;
+        
+        // Wait for DOM update
+        setTimeout(() => {
+          if (this.videoElement && this.videoElement.nativeElement) {
+            this.videoElement.nativeElement.srcObject = stream;
+            this.videoElement.nativeElement.play();
+          }
+          this.cdr.detectChanges();
+        });
+        
+        this.toastr.success('Cámara activada');
+      } catch (error) {
+        console.error('Error accessing camera:', error);
+        this.toastr.error('No se pudo acceder a la cámara');
+      }
+    }
+  }
+
+  closeCamera() {
+    if (this.cameraStream) {
+      this.cameraStream.getTracks().forEach(track => track.stop());
+      this.cameraStream = null;
+    }
+    this.isCameraOpen = false;
+    this.cdr.detectChanges();
+  }
+
+  capturePhoto() {
+    if (!this.isCameraOpen || !this.videoElement || !this.canvasElement) {
+      return;
+    }
+
+    const video = this.videoElement.nativeElement;
+    const canvas = this.canvasElement.nativeElement;
+
+    // Set canvas dimensions to match video
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+
+    // Draw the current video frame
+    const context = canvas.getContext('2d');
+    if (context) {
+      context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+      // Convert canvas to blob
+      canvas.toBlob((blob) => {
+        if (blob) {
+          // Create a File object from the blob
+          const photoFile = new File([blob], `photo_${Date.now()}.jpg`, { type: 'image/jpeg' });
+          
+          // Clear previous photos
+          this.selectedMultimedia = [photoFile];
+          
+          // Close camera after capturing
+          this.closeCamera();
+          
+          this.toastr.success('Foto capturada exitosamente');
+          this.cdr.detectChanges();
+        }
+      }, 'image/jpeg');
+    }
   }
   onDescripcionChange(event: Event) {
     const input = event.target as HTMLTextAreaElement;
@@ -232,6 +313,9 @@ export class EvidenciaComponent implements OnInit {
     this.clearAudioRecording();
     if (this.currentStream) {
       this.currentStream.getTracks().forEach(track => track.stop());
+    }
+    if (this.cameraStream) {
+      this.cameraStream.getTracks().forEach(track => track.stop());
     }
   }
 }

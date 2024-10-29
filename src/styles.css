@@ -14,6 +14,10 @@ body {
     width: auto;
     height: auto;
     background: var(--background_body);
+    display: grid;
+    min-height: 100dvh;
+    grid-template-rows: auto 1fr auto;
+
 }
 html{
     overflow-y: auto;

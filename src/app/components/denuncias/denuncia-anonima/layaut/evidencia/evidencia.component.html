@@ -19,11 +19,25 @@
 
     <!-- Sección para subir contenido multimedia -->
     <div class="multimedia">
-        <p>Puedes agregar un video o una imagen:</p>
-        <div class="multimedia_content">
+        <div class="camera-container" *ngIf="isCameraOpen">
+            <video #videoElement autoplay playsinline></video>
+            <canvas #canvasElement style="display: none;"></canvas>
+            <div class="camera-controls">
+              <button class="capture-btn" (click)="capturePhoto()">
+                <i class='bx bx-camera'></i>
+              </button>
+              <button class="close-btn" (click)="closeCamera()">
+                <i class='bx bx-x'></i>
+              </button>
+            </div>
+          </div>
+          
+          <!-- Update your existing camera icon to use toggleCamera -->
+          <div class="multimedia_content">
             <p>Oprime el icono para agregar evidencia</p>
+            <i class='bx bx-camera' (click)="toggleCamera()"></i>
             <i class='bx bxs-image-add bx-tada' (click)="triggerFileUpload()"></i>
-        </div>
+          </div>
 
         <!-- Input de archivo oculto -->
         <input type="file" id="fileInput" accept="image/*,video/*" (change)="onFileSelected($event)"
