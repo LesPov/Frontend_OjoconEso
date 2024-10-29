@@ -29,7 +29,6 @@ export class SubtiposDeDenunciaComponent implements OnInit {
   denunciaSelected: boolean = false;  // Flag to track if a denuncia is selected
 
   private infosubtiposlist: string[] = [
-    "",
     "Has llegado a la sección de subtipos de denuncia. Aquí puedes afinar más tu elección.",
     "Selecciona un subtipo de denuncia que represente mejor el incidente que quieres reportar.",
     "Haz clic en la imagen del subtipo para escuchar más detalles sobre la opción seleccionada.",

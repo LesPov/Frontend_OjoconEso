@@ -28,7 +28,6 @@ export class UbicacionComponent implements OnInit {
 
   // Lista de mensajes de ayuda
   private infoUbicacion: string[] = [
-    "",
     "Bienvenido a la sección de selección de ubicación.",
     "Tu dispositivo intentará detectar tu ubicación automáticamente. Si no es posible, selecciona un punto en el mapa.",
     "Haz clic en el mapa para elegir el lugar donde ocurrió el incidente.",

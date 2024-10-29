@@ -37,7 +37,6 @@ export class EvidenciaComponent implements OnInit {
   currentStream: MediaStream | null = null;
   // Nueva lista de mensajes
   private infoEvidenciaList: string[] = [
-    "",
     "Bienvenido a la sección de evidencia. Aquí podrás subir archivos multimedia relacionados con tu denuncia.",
     "Selecciona una imagen, video o audio que respalde tu denuncia.",
     "Puedes agregar una descripción detallada de la evidencia que estás subiendo.",

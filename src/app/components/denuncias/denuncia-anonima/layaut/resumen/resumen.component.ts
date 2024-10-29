@@ -27,7 +27,6 @@ export class ResumenComponent implements OnInit {
 
   // Mensajes de ayuda para el resumen
   private inforesumen: string[] = [
-    "",
     "Estás en la sección de resumen de tu denuncia.",
     "Revisa cuidadosamente la información antes de proceder.",
     "Si es necesario, puedes volver atrás para corregir la información.",
