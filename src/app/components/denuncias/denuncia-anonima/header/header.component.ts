@@ -20,6 +20,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   @Input() tipoDenuncia: string | null = null;  // Nuevo input para el tipo de denuncia
   private iconTheme = 'uil-sun';  isSpeaking: boolean = false;
   private subscription: Subscription | undefined;
+  denunciaSelected: boolean = false;  // Flag to track if a denuncia is selected
 
   constructor(
     private location: Location,

@@ -35,6 +35,7 @@
   
   .content {
     width: 90%;
+    margin-bottom: 110px;
   }
   
   .content p {
@@ -46,7 +47,7 @@
     margin: 10px 0;
     padding: 10px;
     border-radius: 8px;
-    background-color: #1d1c491a;
+    background-color: #e4e4e457;
     cursor: pointer;
     transition: background-color 0.3s ease;
     -webkit-tap-highlight-color: transparent;

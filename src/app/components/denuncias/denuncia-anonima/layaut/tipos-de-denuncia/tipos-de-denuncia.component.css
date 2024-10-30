@@ -77,14 +77,14 @@
     -webkit-tap-highlight-color: transparent;
   
   }
-  .denuncia-header::before{
+  /* .denuncia-header::before{
     content: "";
     position: absolute;
     width: 50%;
     border: 1px solid #ddd;
     margin-top: 60px;
     margin-left: 90px;
-  }
+  } */
   
   .denuncia-header span {
     font-weight: bold;
