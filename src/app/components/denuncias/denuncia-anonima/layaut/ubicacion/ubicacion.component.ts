@@ -68,8 +68,10 @@ export class UbicacionComponent implements OnInit {
   }
 
   private initializeMap(lat: number, lng: number) {
-    this.map = L.map('map').setView([lat, lng], 13);
-
+    this.map = L.map('map', {
+      zoomControl: false, // Desactiva el control de zoom
+    }).setView([lat, lng], 13);
+  
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '© OpenStreetMap contributors'
     }).addTo(this.map);
