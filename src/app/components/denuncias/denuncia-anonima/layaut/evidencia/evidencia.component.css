@@ -83,6 +83,10 @@
     display: flex;
     justify-content: center;
     margin-bottom: 20px;
+    flex-direction: column;
+    background: #1d1c49;
+    border-radius: 10px;
+    align-items: flex-end;
 }
 
 img{
@@ -275,3 +279,6 @@ audio {
     color: #fff;
 }
 
+.bx-x{
+color: #fff;
+  }

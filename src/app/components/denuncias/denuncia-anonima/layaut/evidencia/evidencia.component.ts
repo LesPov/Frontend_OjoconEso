@@ -39,6 +39,7 @@ export class EvidenciaComponent implements OnInit {
   videoStream: MediaStream | null = null;
   videoElement: HTMLVideoElement | null = null;
   // Nuevas propiedades para el control de límites
+
   readonly MAX_TOTAL_FILES = 10;
   readonly MAX_CAMERA_FILES = 5;
   cameraFileCount = 0;
@@ -71,6 +72,7 @@ export class EvidenciaComponent implements OnInit {
     // Asignar la nueva lista de mensajes al bot
     this.botInfoService.setInfoList(this.infoEvidenciaList);
   }
+  // Método para eliminar archivos individuales
 
   // New method to initialize camera
   async initCamera() {

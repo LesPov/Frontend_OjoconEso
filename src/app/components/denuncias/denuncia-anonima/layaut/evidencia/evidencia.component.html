@@ -10,11 +10,11 @@
             (input)="onDescripcionChange($event)"></textarea>
 
         <!-- Error message -->
-        <div *ngIf="showError" class="error-message" >
+        <div *ngIf="showError" class="error-message">
             La descripción debe contener al menos {{minimumWords}} palabras.
         </div>
 
-     
+
     </div>
 
     <!-- Sección para subir contenido multimedia -->
@@ -22,20 +22,20 @@
         <div *ngIf="showCamera" class="camera-container">
             <video #cameraFeed id="cameraFeed" class="cameraFeed" autoplay playsinline></video>
             <div class="camera-controls">
-              <button class="capture-btn" (click)="capturePhoto()">
-              </button>
-              <button class="close-btn" (click)="closeCamera()">
-                <i class='bx bx-x'></i>
-              </button>
+                <button class="capture-btn" (click)="capturePhoto()">
+                </button>
+                <button class="close-btn" (click)="closeCamera()">
+                    <i class='bx bx-x'></i>
+                </button>
             </div>
-          </div>
-          
-          <!-- Update your existing multimedia content section -->
-          <div class="multimedia_content">
+        </div>
+
+        <!-- Update your existing multimedia content section -->
+        <div class="multimedia_content">
             <p>Oprime el icono para agregar evidencia</p>
             <i class='bx bx-camera' (click)="initCamera()"></i>
             <i class='bx bxs-image-add bx-tada' (click)="triggerFileUpload()"></i>
-          </div>
+        </div>
 
         <!-- Input de archivo oculto -->
         <input type="file" id="fileInput" accept="image/*,video/*" (change)="onFileSelected($event)"
@@ -44,7 +44,8 @@
         <!-- Vista previa de archivos -->
         <div *ngIf="selectedMultimedia.length > 0" class="preview">
             <p>Archivo seleccionado</p>
-            <div *ngFor="let file of selectedMultimedia" class="file-preview">
+            <div *ngFor="let file of selectedMultimedia; let i = index" class="file-preview">
+                <i (click)="removeFile(i)" class='bx bx-x bx-tada'></i>
                 <img *ngIf="isImage(file)" [src]="getFileUrl(file)" alt="Imagen seleccionada">
                 <video *ngIf="isVideo(file)" [src]="getFileUrl(file)" controls></video>
             </div>
@@ -68,5 +69,5 @@
 </div>
 
 <app-footer [currentStep]="currentStep" [totalSteps]="totalSteps" [showStepCounter]="true"
-[denunciaSeleccionada]="descripcion.trim().length > 0 && wordCount >= minimumWords" (continuar)="handleContinue()">
+    [denunciaSeleccionada]="descripcion.trim().length > 0 && wordCount >= minimumWords" (continuar)="handleContinue()">
 </app-footer>
