@@ -16,11 +16,11 @@ import { BotInfoService } from '../shared/bot/botInfoDenuncias';
 export class DenunciaAnonimaComponent implements OnInit {
 
   public infoListAnonima: string[] = [
-    "Bienvenido alimalaha ",
-    "En esta sección podrás realizar denuncias anónimas. Recuerda que una denuncia anónima permite reportar situaciones sin necesidad de revelar tu identidad, protegiendo tu seguridad.",
+    "Como denunciar anonimamente",
+    "En esta sección puedes realizar denuncias de forma anónima. Recuerda que una denuncia anónima te permite reportar situaciones sin revelar tu identidad, protegiendo así tu seguridad.",
     "Te guiaremos paso a paso en el proceso para que puedas completar toda la información necesaria.",
-    "Recuerda que el proceso tiene varias etapas como el tipo de denuncia, evidencias, dirección delincidente,entre otras.",
-  ];
+    "Recuerda que el proceso incluye varias etapas, como seleccionar el tipo de denuncia, agregar evidencias, indicar la ubicación del incidente, entre otras.",
+];
 
   constructor(
     private router: Router,
