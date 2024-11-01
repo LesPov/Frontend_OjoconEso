@@ -75,3 +75,22 @@
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
+.btn-ubicacion-actual {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 1000;
+  padding: 5px;
+  background-color: #1d1c49;
+  color: #f8d906;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.btn-ubicacion-actual i{
+font-size: 35px;
+}
+
+.btn-ubicacion-actual:hover {
+  background-color: #0056b3;
+}

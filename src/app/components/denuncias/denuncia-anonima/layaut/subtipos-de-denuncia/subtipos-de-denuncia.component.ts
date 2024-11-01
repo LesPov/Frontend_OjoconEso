@@ -4,12 +4,13 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { BotInfoService } from '../../../shared/bot/botInfoDenuncias';
-import { FooterComponent } from '../../footer/footer.component';
-import { HeaderComponent } from '../../header/header.component';
+
 import { SubtipoDenunciaInterface } from '../../interface/subtipoDenunciaInterface';
 import { DenunciasService } from '../../service/denuncias.service';
 import { DenunciaStorageService } from '../../service/denunciaStorage.service';
 import { environment } from '../../../../../../environments/environment';
+import { FooterComponent } from '../footer/footer.component';
+import { HeaderComponent } from '../header/header.component';
 
 @Component({
   selector: 'app-subtipos-de-denuncia',

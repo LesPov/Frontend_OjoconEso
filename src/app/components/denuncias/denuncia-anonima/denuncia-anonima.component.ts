@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { HeaderComponent } from './header/header.component';
+import { HeaderComponent } from './layaut/header/header.component';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { BotInfoService } from '../shared/bot/botInfoDenuncias';
@@ -20,7 +20,7 @@ export class DenunciaAnonimaComponent implements OnInit {
     "En esta sección puedes realizar denuncias de forma anónima. Recuerda que una denuncia anónima te permite reportar situaciones sin revelar tu identidad, protegiendo así tu seguridad.",
     "Te guiaremos paso a paso en el proceso para que puedas completar toda la información necesaria.",
     "Recuerda que el proceso incluye varias etapas, como seleccionar el tipo de denuncia, agregar evidencias, indicar la ubicación del incidente, entre otras.",
-];
+  ];
 
   constructor(
     private router: Router,

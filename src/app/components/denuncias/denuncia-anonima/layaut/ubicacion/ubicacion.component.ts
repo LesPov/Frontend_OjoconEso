@@ -6,8 +6,8 @@ import { Router } from '@angular/router';
 import * as L from 'leaflet';
 import { ToastrService } from 'ngx-toastr';
 import { BotInfoService } from '../../../shared/bot/botInfoDenuncias';
-import { FooterComponent } from '../../footer/footer.component';
-import { HeaderComponent } from '../../header/header.component';
+import { FooterComponent } from '../footer/footer.component';
+import { HeaderComponent } from '../header/header.component';
 import { DenunciaStorageService } from '../../service/denunciaStorage.service';
 
 @Component({
@@ -93,7 +93,24 @@ export class UbicacionComponent implements OnInit {
 
     await this.obtenerDireccion(lat, lng);  // Obtener la dirección seleccionada
   }
-
+  centrarEnUbicacionActual() {
+    if ('geolocation' in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          this.map.setView([latitude, longitude], 13);  // Re-centra el mapa en la ubicación actual
+          this.handleMapClick({ latlng: { lat: latitude, lng: longitude } } as L.LeafletMouseEvent);
+          this.toastr.success('Direccion actual');
+        },
+        (error) => {
+          this.toastr.error('No se pudo obtener la ubicación actual');
+        }
+      );
+    } else {
+      this.toastr.error('El dispositivo no soporta geolocalización');
+    }
+  }
+  
   private async obtenerDireccion(lat: number, lng: number) {
     this.isLoading = true;
     try {

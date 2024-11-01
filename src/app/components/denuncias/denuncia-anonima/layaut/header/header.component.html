@@ -6,7 +6,7 @@
 
     <!-- Botón de habla solo si showSpeakButton es true -->
     <div class="menu">
-        <div class="loader circule">
+        <!-- <div class="loader circule">
             <svg viewBox="0 0 80 80">
                 <circle r="32" cy="40" cx="40" id="test"></circle>
             </svg>
@@ -16,7 +16,7 @@
             <svg viewBox="0 0 86 80">
                 <polygon points="43 8 79 72 7 72"></polygon>
             </svg>
-        </div>
+        </div> -->
 
         <div *ngIf="showSpeakButton" class="loader cuadro"  >
             <i class='bx bx-user-voice bx-tada' [class.bx-tada]="isSpeaking"(click)="speak()"></i>

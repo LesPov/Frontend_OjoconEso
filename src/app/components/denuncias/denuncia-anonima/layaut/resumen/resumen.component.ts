@@ -5,8 +5,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DenunciaAnonimaInterface } from '../../interface/denunciaAnonimaInterface';
 import { BotInfoService } from '../../../shared/bot/botInfoDenuncias';
-import { FooterComponent } from '../../footer/footer.component';
-import { HeaderComponent } from '../../header/header.component';
+import { FooterComponent } from '../footer/footer.component';
+import { HeaderComponent } from '../header/header.component';
 import { DenunciasService } from '../../service/denuncias.service';
 import { DenunciaStorageService } from '../../service/denunciaStorage.service';
 

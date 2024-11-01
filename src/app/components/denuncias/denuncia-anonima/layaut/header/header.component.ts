@@ -1,6 +1,6 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { BotInfoService } from '../../shared/bot/botInfoDenuncias';
+import { BotInfoService } from '../../../shared/bot/botInfoDenuncias';
 import { CommonModule, Location } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -18,7 +18,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   @Input() componentName: string = '';
   private darkTheme = 'dark-theme';
   @Input() tipoDenuncia: string | null = null;  // Nuevo input para el tipo de denuncia
-  private iconTheme = 'uil-sun';  isSpeaking: boolean = false;
+  private iconTheme = 'uil-sun'; isSpeaking: boolean = false;
   private subscription: Subscription | undefined;
   denunciaSelected: boolean = false;  // Flag to track if a denuncia is selected
 
@@ -68,7 +68,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
   speak(): void {
     const iconElement = document.querySelector('.bx-user-voice');
-  
+
     if (this.isSpeaking) {
       this.botInfoService.cancelSpeak();
       this.isSpeaking = false;
@@ -78,9 +78,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.isSpeaking = true;
       this.toggleSpeakingAnimation(true);
       iconElement?.classList.add('speaking-active');
-  
+
       const text = this.botInfoService.getNextInfo();
-  
+
       this.botInfoService.speak(text)
         .then(() => {
           this.isSpeaking = false;
@@ -95,7 +95,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         });
     }
   }
-  
+
 
   activatePulseAnimation(): void {
     const element = document.querySelector('.cuadro');
@@ -109,7 +109,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     const iconElement = document.querySelector('.bx-user-voice');
     iconElement?.classList.toggle('speaking-active', isSpeaking);
   }
-  
+
 
   getHeaderClass(): string {
     return this.componentName === 'subtipos' ? 'header-subtipos' : '';
