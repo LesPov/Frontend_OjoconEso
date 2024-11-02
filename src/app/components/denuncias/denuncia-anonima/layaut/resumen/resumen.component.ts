@@ -9,6 +9,7 @@ import { FooterComponent } from '../footer/footer.component';
 import { HeaderComponent } from '../header/header.component';
 import { DenunciasService } from '../../service/denuncias.service';
 import { DenunciaStorageService } from '../../service/denunciaStorage.service';
+import { ToastrService } from 'ngx-toastr';
 
 
 @Component({
@@ -22,8 +23,8 @@ export class ResumenComponent implements OnInit {
   currentStep = 3;
   totalSteps = 3;
   datosResumen: Partial<DenunciaAnonimaInterface> = {};
-  claveUnica: string | null = null; 
-  showModal: boolean = false; 
+  claveUnica: string | null = null;
+  showModal: boolean = false;
 
   // Mensajes de ayuda para el resumen
   private inforesumen: string[] = [
@@ -36,7 +37,9 @@ export class ResumenComponent implements OnInit {
     private denunciaStorageService: DenunciaStorageService,
     private botInfoService: BotInfoService,
     private denunciasService: DenunciasService,
-    private router: Router
+    private router: Router,
+    private toastr: ToastrService,
+
   ) { }
 
   ngOnInit(): void {
@@ -81,6 +84,17 @@ export class ResumenComponent implements OnInit {
             console.error('Error al crear la denuncia:', error);
           },
         });
+    }
+  }
+  // Dentro de tu componente ResumenComponent
+
+  copiarClave(): void {
+    if (this.claveUnica) {
+      navigator.clipboard.writeText(this.claveUnica).then(() => {
+        this.toastr.success("Clave copiada al portapapeles", "Éxito");
+      }).catch(err => {
+        console.error("Error al copiar la clave", err);
+      });
     }
   }
 

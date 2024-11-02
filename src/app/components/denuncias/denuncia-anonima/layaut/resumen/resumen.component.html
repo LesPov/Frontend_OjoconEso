@@ -54,10 +54,10 @@
         <h1>Denuncia enviada con éxito</h1>
         <p>Tu denuncia ha sido registrada con la clave de radicado:</p>
         <div class="clave-unica">
+            <i class='bx bx-copy-alt bx-flashing' (click)="copiarClave()"></i>
             {{ claveUnica }}
         </div>
-        <p>Por favor, guarda esta clave para futuras consultas.</p>
-        <button class="learn-more" (click)="closeModal()">Continuar
-        </button>
+        <p>Por favor copia y guarda esta clave para futuras consultas.</p>
+        <button class="learn-more" (click)="closeModal()">Continuar</button>
     </div>
 </div>
