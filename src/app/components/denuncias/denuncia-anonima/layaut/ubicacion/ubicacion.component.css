@@ -86,11 +86,9 @@
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
 }
 .btn-ubicacion-actual i{
 font-size: 35px;
 }
 
-.btn-ubicacion-actual:hover {
-  background-color: #0056b3;
-}
