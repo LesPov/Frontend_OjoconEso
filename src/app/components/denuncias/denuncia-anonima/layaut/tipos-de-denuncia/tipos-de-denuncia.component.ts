@@ -110,7 +110,7 @@ export class TiposDeDenunciaComponent implements OnInit {
     if (!flagImage) {
       return '../../../../../../assets/img/default-denuncia.png'; // Imagen por defecto
     }
-    return `${environment.endpoint}uploads/${flagImage}`;
+    return `${environment.endpoint}uploads/tipoDenuncias/tipo/${flagImage}`;
   }
 
   handleContinue(): void {
