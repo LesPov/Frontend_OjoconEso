@@ -26,16 +26,33 @@ export class DenunciasService {
   }
 
  
-  // Crear una denuncia anónima
+  // Crear una denuncia anónima con archivos de prueba y audio
   crearDenunciaAnonima(
-    denuncia: DenunciaAnonimaInterface
+    denuncia: DenunciaAnonimaInterface,
+    pruebas: File[] = [],
+    audios: File[] = []
   ): Observable<{ message: string; nuevaDenuncia: DenunciaAnonimaInterface }> {
-    const headers = new HttpHeaders().set('Content-Type', 'application/json');
-    // Ajustamos la URL para que incluya "denuncias/" al final
+    const formData = new FormData();
+
+    // Agrega los campos de la denuncia al FormData
+    formData.append('descripcion', denuncia.descripcion);
+    formData.append('direccion', denuncia.direccion);
+    formData.append('nombreTipo', denuncia.nombreTipo);
+    formData.append('nombreSubtipo', denuncia.nombreSubtipo);
+
+    // Agrega cada archivo de prueba
+    pruebas.forEach((file, index) => {
+      formData.append('pruebas', file, file.name);
+    });
+
+    // Agrega cada archivo de audio
+    audios.forEach((file, index) => {
+      formData.append('audio', file, file.name);
+    });
+
     return this.http.post<{ message: string; nuevaDenuncia: DenunciaAnonimaInterface }>(
       `${this.baseUrl}denuncias/`,
-      denuncia,
-      { headers }
+      formData
     );
   }
 
