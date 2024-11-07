@@ -1,10 +1,10 @@
-// consulta.component.ts
 import { Component } from '@angular/core';
 import { ConsultaDenunciaResponse } from '../../interface/consultasDenunciasAnonimasInterface';
 import { DenunciasService } from '../../service/denuncias.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HeaderComponent } from '../header/header.component';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-consulta',
@@ -18,11 +18,20 @@ export class ConsultaComponent {
   denuncia: any = null;
   error: string = '';
 
-  constructor(private denunciasService: DenunciasService) { }
+  constructor(
+    private denunciasService: DenunciasService,
+    private toastr: ToastrService
+  ) {}
 
   consultarDenuncia() {
     this.denuncia = null;
     this.error = '';
+
+    // Verificar si la clave está vacía
+    if (!this.claveUnica.trim()) {
+      this.toastr.error('Por favor, ingresa una clave de radicado', 'Clave requerida');
+      return;
+    }
 
     this.denunciasService.consultarDenunciaAnonima(this.claveUnica)
       .subscribe(
@@ -35,6 +44,7 @@ export class ConsultaComponent {
         (error) => {
           this.denuncia = null;
           this.error = error.error.error;
+          this.toastr.error('Clave incorrecta, por favor verifica', 'Error de consulta');
         }
       );
   }
