@@ -329,6 +329,7 @@ export class EvidenciaComponent implements OnInit {
   }
 
   isImage(file: File): boolean {
+
     return file.type.startsWith('image/');
   }
 
@@ -340,46 +341,42 @@ export class EvidenciaComponent implements OnInit {
     return URL.createObjectURL(file);
   }
 
-  // Método para continuar al siguiente paso (solo si la descripción no está vacía)
   handleContinue(): void {
     if (this.descripcion.trim().length === 0) {
       this.toastr.error('Debes ingresar una descripción para continuar');
       return;
     }
-
+  
     if (this.wordCount < this.minimumWords) {
       this.toastr.error(`La descripción debe contener al menos ${this.minimumWords} palabras`);
       return;
     }
 
-    const multimediaPaths: string[] = [];
-
-    // Guardar los archivos multimedia seleccionados
-    this.selectedMultimedia.forEach(file => {
-      const uniqueFileName = `${Date.now()}-${file.name}`; // Genera un nombre único usando la marca de tiempo
-      const filePath = `uploads/multimedia/${uniqueFileName}`; // Ruta donde se almacenará el archivo
-      multimediaPaths.push(filePath);
-      // Aquí debes incluir la lógica para subir el archivo al servidor
-      // y moverlo a `uploads/multimedia/` o la ruta que desees
-    });
-
-    let audioPath: string | undefined;
+    // Convertir el audioBlob a File si existe
+    let audioFiles: File[] = [];
     if (this.audioBlob) {
-      const uniqueAudioName = `${Date.now()}-audio.wav`; // Nombre único para el archivo de audio
-      audioPath = `uploads/audio/${uniqueAudioName}`;
-      // Aquí deberías subir el blob de audio al servidor, guardándolo en `uploads/audio/`
+      const audioFile = new File(
+        [this.audioBlob],
+        `${Date.now()}-audio.wav`,
+        { type: 'audio/wav' }
+      );
+      audioFiles.push(audioFile);
     }
 
-    // Guardar en el storage
+    // Los archivos multimedia ya están como File objects en selectedMultimedia
+    const multimediaFiles = Array.from(this.selectedMultimedia);
+
+    // Guardar en el storage usando los File objects directamente
     this.denunciaStorage.setDescripcionPruebas(
       this.descripcion,
-      multimediaPaths.length > 0 ? multimediaPaths.join(',') : undefined,
-      audioPath
+      multimediaFiles,
+      audioFiles
     );
-
+  
     this.router.navigate(['/ubicacion']);
   }
 
+  
   // Limpieza de recursos cuando el componente se destruye
   ngOnDestroy() {
     this.clearAudioRecording();
