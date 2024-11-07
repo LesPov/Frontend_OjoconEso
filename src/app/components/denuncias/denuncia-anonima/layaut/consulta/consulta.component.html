@@ -1,1 +1,47 @@
-<p>consulta works!</p>
+<app-header [title]="'Consulta tu Denuncia'"  [showSpeakButton]="true"
+    [componentName]="'evidencia'">
+</app-header>
+
+<div class="container ">
+  
+    <div class="form-group">
+      <label for="claveUnica">Clave del Rdicado:</label>
+      <input type="text" class="form-control" id="claveUnica" [(ngModel)]="claveUnica" placeholder="Ingresa la clave del radicado">
+    </div>
+  
+    <button class="btn " (click)="consultarDenuncia()">Consultar</button>
+  
+    <div class="content" *ngIf="denuncia">
+      <h2>Detalles de la Denuncia</h2>
+      <p class="detail-item"><strong>Tipo de Denuncia:</strong> {{ denuncia.tipoDenuncia.nombre }}</p>
+      <p class="detail-item"><strong>Subtipo de Denuncia:</strong> {{ denuncia.subtipoDenuncia.nombre }}</p>
+      <p class="detail-item"><strong>Dirección:</strong> {{ denuncia.direccion }}</p>
+      <p class="detail-item"><strong>Descripción:</strong> {{ denuncia.descripcion }}</p>
+      <p class="detail-item"><strong>Estado:</strong> {{ denuncia.status }}</p>
+      <p class="detail-item"><strong>Fecha de Creación:</strong> {{ denuncia.fechaCreacion | date:'yyyy-MM-dd ' }}</p>
+      <p class="detail-item"><strong>Fecha de Actualización:</strong> {{ denuncia.fechaActualizacion | date:'yyyy-MM-dd ' }}</p>
+  
+  
+      <div *ngIf="denuncia.pruebas.length > 0" class="attachments">
+        <h3>Pruebas Adjuntas</h3>
+        <div class="attachment-item" *ngFor="let prueba of denuncia.pruebas">
+          <ng-container [ngSwitch]="prueba.type">
+            <img *ngSwitchCase="'image'" [src]="prueba.url" alt="Prueba" class="img-fluid">
+            <video *ngSwitchCase="'video'" [src]="prueba.url" controls class="video-fluid"></video>
+          </ng-container>
+        </div>
+      </div>
+    
+      <div *ngIf="denuncia.audio" class="audio-attachment">
+        <h3>Audio Adjunto</h3>
+        <audio controls>
+          <source [src]="denuncia.audio" type="audio/mpeg">
+          Tu navegador no soporta el elemento de audio.
+        </audio>
+      </div>
+    </div>
+  
+    <div class="alert" *ngIf="error">
+      {{ error }}
+    </div>
+  </div>
