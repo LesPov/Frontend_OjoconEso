@@ -21,8 +21,22 @@
     <div class="multimedia">
         <div *ngIf="showCamera" class="camera-container">
             <video #cameraFeed id="cameraFeed" class="cameraFeed" autoplay playsinline></video>
+
+
+
             <div class="camera-controls">
-                <button class="capture-btn" (click)="capturePhoto()">
+                <!-- Sidenav para seleccionar Foto o Video -->
+                <div class="camera-sidenav">
+                    <button class="botonvideo foto" [ngClass]="{'activo': isPhotoMode}" (click)="selectMode('photo')">
+                        Foto
+                    </button>
+                    <button class="botonvideo video" [ngClass]="{'activo': !isPhotoMode}" (click)="selectMode('video')">
+                        Video
+                    </button>
+                </div>
+                <button class="capture-btn" *ngIf="isPhotoMode" (click)="capturePhoto()"></button>
+                <button class="record-btn" *ngIf="!isPhotoMode" [class.recording]="isRecordingVideo"
+                    (click)="toggleVideoRecording()">
                 </button>
                 <button class="close-btn" (click)="closeCamera()">
                     <i class='bx bx-x'></i>

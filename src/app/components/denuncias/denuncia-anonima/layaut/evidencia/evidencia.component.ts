@@ -43,7 +43,13 @@ export class EvidenciaComponent implements OnInit {
   readonly MAX_TOTAL_FILES = 10;
   readonly MAX_CAMERA_FILES = 5;
   cameraFileCount = 0;
-
+  // Propiedades para modo de captura
+  isPhotoMode: boolean = true;
+  isRecordingVideo: boolean = false;
+  videoRecorder: MediaRecorder | null = null;
+  recordedChunks: Blob[] = [];
+  videoBlob: Blob | null = null;
+  
   // Nueva lista de mensajes
   private infoEvidenciaList: string[] = [
     "Bienvenido a la sección de evidencia. Aquí podrás subir archivos multimedia relacionados con tu denuncia.",
@@ -72,91 +78,206 @@ export class EvidenciaComponent implements OnInit {
     // Asignar la nueva lista de mensajes al bot
     this.botInfoService.setInfoList(this.infoEvidenciaList);
   }
-  // Método para eliminar archivos individuales
+  ///////////////////////////////GRABACION//////////////////////////
+  
+  // Método para seleccionar el modo (foto o video)
+  selectMode(mode: string) {
+    this.isPhotoMode = mode === 'photo';
+  }
 
-  // New method to initialize camera
+  // Método para alternar entre iniciar/detener grabación de video
+  async toggleVideoRecording() {
+    if (!this.isRecordingVideo) {
+      await this.startVideoRecording();
+    } else {
+      this.stopVideoRecording();
+      this.closeCamera();
+
+    }
+    this.cdr.detectChanges();
+
+  }
+
+// Iniciar la grabación de video
+// Iniciar la grabación de video con audio
+private async startVideoRecording() {
+  try {
+    // Solicitar permisos para video y audio
+    const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+    
+    this.videoRecorder = new MediaRecorder(stream, { mimeType: 'video/webm; codecs=vp8,opus' });
+    this.recordedChunks = [];
+
+    // Almacenar los datos grabados en los chunks
+    this.videoRecorder.ondataavailable = (event) => {
+      if (event.data.size > 0) {
+        this.recordedChunks.push(event.data);
+      }
+    };
+
+    // Finalizar la grabación y crear el archivo con video y audio
+    this.videoRecorder.onstop = () => {
+      this.videoBlob = new Blob(this.recordedChunks, { type: 'video/webm' });
+      const videoFile = new File([this.videoBlob], `video-${Date.now()}.webm`, { type: 'video/webm' });
+      this.selectedMultimedia.push(videoFile);
+      this.toastr.success('Video con audio grabado con éxito');
+      this.cdr.detectChanges();
+    };
+
+    // Iniciar la grabación
+    this.videoRecorder.start();
+    this.isRecordingVideo = true;
+    this.cdr.detectChanges();
+  } catch (error) {
+    this.toastr.error('No se pudo iniciar la grabación de video con audio');
+    console.error('Error al iniciar la grabación de video con audio:', error);
+  }
+}
+
+
+// Detener la grabación de video
+private stopVideoRecording() {
+  this.videoRecorder?.stop();
+  this.isRecordingVideo = false;
+  this.cdr.detectChanges();
+}
+  ////////////////////////////////////////////////////////////////////
   async initCamera() {
     try {
-      if (!this.canTakeMorePhotos()) {
-        if (this.cameraFileCount >= this.MAX_CAMERA_FILES) {
-          this.toastr.error(`Has alcanzado el límite de ${this.MAX_CAMERA_FILES} fotos con la cámara`);
-        } else {
-          this.toastr.error(`Has alcanzado el límite total de ${this.MAX_TOTAL_FILES} archivos multimedia`);
-        }
-        return;
-      }
-      this.showCamera = true;
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: 'environment' },
-        audio: false
-      });
+      if (!this.checkPhotoLimits()) return;
 
-      // Wait for DOM to update
-      setTimeout(() => {
-        this.videoElement = document.querySelector('#cameraFeed');
-        if (this.videoElement) {
-          this.videoElement.srcObject = stream;
-          this.videoStream = stream;
-        }
-      }, 100);
+      this.showCamera = true;
+      const stream = await this.startCameraStream();
+
+      this.initializeVideoElement(stream);
 
       this.cdr.detectChanges();
     } catch (error) {
-      console.error('Error accessing camera:', error);
-      this.toastr.error('No se pudo acceder a la cámara');
-      this.closeCamera();
+      this.handleCameraError(error);
     }
   }
-  // Método modificado para capturar foto con validación
+
+  // Validar los límites de fotos antes de abrir la cámara
+  private checkPhotoLimits(): boolean {
+    if (!this.canTakeMorePhotos()) {
+      this.displayLimitError();
+      return false;
+    }
+    return true;
+  }
+
+  // Mostrar mensaje de error en caso de superar el límite de fotos
+  private displayLimitError() {
+    if (this.cameraFileCount >= this.MAX_CAMERA_FILES) {
+      this.toastr.error(`Has alcanzado el límite de ${this.MAX_CAMERA_FILES} fotos con la cámara`);
+    } else {
+      this.toastr.error(`Has alcanzado el límite total de ${this.MAX_TOTAL_FILES} archivos multimedia`);
+    }
+  }
+
+  // Iniciar el flujo de la cámara
+  private async startCameraStream(): Promise<MediaStream> {
+    return navigator.mediaDevices.getUserMedia({
+      video: { facingMode: 'environment' },
+      audio: false
+    });
+  }
+
+  // Inicializar el elemento de video y asignarle el flujo de la cámara
+  private initializeVideoElement(stream: MediaStream) {
+    setTimeout(() => {
+      this.videoElement = document.querySelector('#cameraFeed');
+      if (this.videoElement) {
+        this.videoElement.srcObject = stream;
+        this.videoStream = stream;
+      }
+    }, 100);
+  }
+
+  // Manejar errores al acceder a la cámara
+  private handleCameraError(error: any) {
+    console.error('Error accessing camera:', error);
+    this.toastr.error('No se pudo acceder a la cámara');
+    this.closeCamera();
+  }
+
+  // Función principal para capturar foto
   async capturePhoto() {
+    if (!this.validatePhotoLimits()) return;
+
+    if (!this.videoElement) return;
+
+    try {
+      const photoBlob = await this.captureImageFromVideo();
+      const photoFile = this.createPhotoFile(photoBlob);
+
+      this.addPhotoToGallery(photoFile);
+      this.showSuccessMessage();
+      this.closeCamera();
+    } catch (error) {
+      this.handleCaptureError(error);
+    }
+  }
+
+  // Validar los límites de archivos
+  private validatePhotoLimits(): boolean {
     if (this.cameraFileCount >= this.MAX_CAMERA_FILES) {
       this.toastr.error(`Solo puedes tomar un máximo de ${this.MAX_CAMERA_FILES} fotos con la cámara`);
       this.closeCamera();
-      return;
+      return false;
     }
 
     if (this.selectedMultimedia.length >= this.MAX_TOTAL_FILES) {
       this.toastr.error(`Has alcanzado el límite máximo de ${this.MAX_TOTAL_FILES} archivos multimedia`);
       this.closeCamera();
-      return;
+      return false;
     }
 
-    if (!this.videoElement) return;
+    return true;
+  }
 
+  // Capturar imagen desde el video en un elemento canvas y obtener el blob de la imagen
+  private async captureImageFromVideo(): Promise<Blob> {
     const canvas = document.createElement('canvas');
-    canvas.width = this.videoElement.videoWidth;
-    canvas.height = this.videoElement.videoHeight;
+    canvas.width = this.videoElement!.videoWidth;
+    canvas.height = this.videoElement!.videoHeight;
 
     const context = canvas.getContext('2d');
-    if (!context) return;
+    if (!context) throw new Error("No se pudo obtener el contexto del canvas");
 
-    context.drawImage(this.videoElement, 0, 0, canvas.width, canvas.height);
+    context.drawImage(this.videoElement!, 0, 0, canvas.width, canvas.height);
 
-    try {
-      const blob = await new Promise<Blob>((resolve) => {
-        canvas.toBlob((blob) => {
-          if (blob) resolve(blob);
-        }, 'image/jpeg', 0.95);
-      });
-
-      const file = new File([blob], `camera-capture-${Date.now()}.jpg`, {
-        type: 'image/jpeg'
-      });
-
-      // Incrementar contador de fotos de cámara
-      this.cameraFileCount++;
-
-      // Mantener archivos existentes y agregar el nuevo
-      this.selectedMultimedia = [...this.selectedMultimedia, file];
-
-      this.toastr.success('Foto capturada exitosamente');
-      this.closeCamera();
-      this.cdr.detectChanges();
-    } catch (error) {
-      console.error('Error capturing photo:', error);
-      this.toastr.error('Error al capturar la foto');
-    }
+    return new Promise<Blob>((resolve, reject) => {
+      canvas.toBlob((blob) => {
+        if (blob) resolve(blob);
+        else reject(new Error("No se pudo capturar la imagen"));
+      }, 'image/jpeg', 0.95);
+    });
   }
+
+  // Crear un archivo de foto a partir de un Blob
+  private createPhotoFile(blob: Blob): File {
+    return new File([blob], `camera-capture-${Date.now()}.jpg`, { type: 'image/jpeg' });
+  }
+
+  // Añadir la foto capturada a la galería de multimedia
+  private addPhotoToGallery(file: File) {
+    this.cameraFileCount++;
+    this.selectedMultimedia = [...this.selectedMultimedia, file];
+    this.cdr.detectChanges();
+  }
+
+  // Mostrar mensaje de éxito
+  private showSuccessMessage() {
+    this.toastr.success('Foto capturada exitosamente');
+  }
+
+  // Manejar el error en la captura de foto
+  private handleCaptureError(error: any) {
+    console.error('Error capturing photo:', error);
+    this.toastr.error('Error al capturar la foto');
+  }
+
 
   // Method to close camera
   closeCamera() {
@@ -164,6 +285,8 @@ export class EvidenciaComponent implements OnInit {
       this.videoStream.getTracks().forEach(track => track.stop());
       this.videoStream = null;
     }
+    this.stopVideoRecording();
+
     this.showCamera = false;
     this.videoElement = null;
     this.cdr.detectChanges();
@@ -264,6 +387,7 @@ export class EvidenciaComponent implements OnInit {
     }
   }
   // Método modificado para la selección de archivos
+  // Método para seleccionar archivos
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (!input.files || input.files.length === 0) return;
@@ -272,32 +396,47 @@ export class EvidenciaComponent implements OnInit {
     const totalNewFiles = newFiles.length;
     const currentTotal = this.selectedMultimedia.length;
 
-    // Validar límite total de archivos
-    if (currentTotal + totalNewFiles > this.MAX_TOTAL_FILES) {
-      this.toastr.error(`Solo puedes subir un máximo de ${this.MAX_TOTAL_FILES} archivos en total. Actualmente tienes ${currentTotal} archivo(s)`);
-      // Limpiar el input para permitir nueva selección
-      input.value = '';
+    if (!this.validateTotalFileLimit(totalNewFiles, currentTotal)) {
+      input.value = ''; // Limpiar el input
       return;
     }
 
-    // Validar que solo sean imágenes o videos
-    const invalidFiles = newFiles.filter(file => !this.isImage(file) && !this.isVideo(file));
+    if (!this.validateFileTypes(newFiles)) {
+      input.value = ''; // Limpiar el input
+      return;
+    }
+
+    // Añadir archivos nuevos y actualizar la vista
+    this.addFilesToGallery(newFiles);
+    input.value = ''; // Limpiar el input para permitir nueva selección
+  }
+
+  // Validar el límite total de archivos
+  private validateTotalFileLimit(totalNewFiles: number, currentTotal: number): boolean {
+    if (currentTotal + totalNewFiles > this.MAX_TOTAL_FILES) {
+      this.toastr.error(`Solo puedes subir un máximo de ${this.MAX_TOTAL_FILES} archivos en total. Actualmente tienes ${currentTotal} archivo(s).`);
+      return false;
+    }
+    return true;
+  }
+
+  // Validar tipos de archivos (solo imágenes o videos)
+  private validateFileTypes(files: File[]): boolean {
+    const invalidFiles = files.filter(file => !this.isImage(file) && !this.isVideo(file));
     if (invalidFiles.length > 0) {
       this.toastr.error('Solo se permiten archivos de imagen o video');
-      input.value = '';
-      return;
+      return false;
     }
-
-    // Mantener archivos existentes y agregar los nuevos
-    this.selectedMultimedia = [...this.selectedMultimedia, ...newFiles];
-    this.cdr.detectChanges();
-
-    // Mostrar mensaje de éxito con contador
-    this.toastr.success(`Se agregaron ${totalNewFiles} archivo(s). Total: ${this.selectedMultimedia.length} de ${this.MAX_TOTAL_FILES}`);
-
-    // Limpiar el input para permitir nueva selección del mismo archivo
-    input.value = '';
+    return true;
   }
+
+  // Agregar archivos a la galería
+  private addFilesToGallery(files: File[]) {
+    this.selectedMultimedia = [...this.selectedMultimedia, ...files];
+    this.cdr.detectChanges();
+    this.toastr.success(`Se agregaron ${files.length} archivo(s). Total: ${this.selectedMultimedia.length} de ${this.MAX_TOTAL_FILES}`);
+  }
+
   // Resto de los métodos existentes...
   triggerFileUpload(): void {
     const fileInput = document.getElementById('fileInput') as HTMLInputElement;
@@ -346,7 +485,7 @@ export class EvidenciaComponent implements OnInit {
       this.toastr.error('Debes ingresar una descripción para continuar');
       return;
     }
-  
+
     if (this.wordCount < this.minimumWords) {
       this.toastr.error(`La descripción debe contener al menos ${this.minimumWords} palabras`);
       return;
@@ -372,18 +511,20 @@ export class EvidenciaComponent implements OnInit {
       multimediaFiles,
       audioFiles
     );
-  
+
     this.router.navigate(['/ubicacion']);
   }
 
-  
+
   // Limpieza de recursos cuando el componente se destruye
   ngOnDestroy() {
+    this.stopVideoRecording();
+    this.closeCamera();
+
     this.clearAudioRecording();
     if (this.currentStream) {
       this.currentStream.getTracks().forEach(track => track.stop());
     }
-    this.closeCamera();
 
   }
 }
