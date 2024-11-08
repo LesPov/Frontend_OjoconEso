@@ -280,7 +280,7 @@ audio {
 
 }
 
-.recording {
+.record-btn.recording {
     background: red !important;
 }
 
