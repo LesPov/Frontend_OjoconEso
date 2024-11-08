@@ -91,7 +91,6 @@ export class EvidenciaComponent implements OnInit {
       await this.startVideoRecording();
     } else {
       await this.stopVideoRecording();
-      this.closeCamera();
 
     }
     this.cdr.detectChanges();
@@ -149,6 +148,8 @@ export class EvidenciaComponent implements OnInit {
     if (this.videoRecorder && this.isRecordingVideo) {
       this.videoRecorder.stop();
       this.isRecordingVideo = false;
+            this.closeCamera();
+
       // La limpieza del stream se realiza en el evento onstop del videoRecorder
     }
   }
