@@ -80,91 +80,70 @@ export class EvidenciaComponent implements OnInit {
     this.botInfoService.setInfoList(this.infoEvidenciaList);
   }
   ///////////////////////////////GRABACION//////////////////////////
-  // Método para seleccionar el modo (foto o video)
-  selectMode(mode: string) {
+   // Selección de modo foto o video
+   selectMode(mode: string) {
     this.isPhotoMode = mode === 'photo';
   }
 
-  // Modificar el método de toggleVideoRecording
+  // Alternar grabación de video
   async toggleVideoRecording() {
     if (!this.isRecordingVideo) {
       await this.startVideoRecording();
     } else {
       await this.stopVideoRecording();
-
     }
     this.cdr.detectChanges();
   }
 
-  // Modificar el método startVideoRecording
+  // Iniciar grabación de video
   private async startVideoRecording() {
     try {
-      // Verifica si el navegador admite la grabación en el móvil
-      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-  
-      // Solicita permisos para video y audio
+      // Solicitar permisos para video y audio
       const stream = await navigator.mediaDevices.getUserMedia({
-        video: true,
+        video: { facingMode: 'environment' },  // Configuración para cámaras traseras en móviles
         audio: true
       });
-  
-      // Guarda referencia al stream
+
       this.currentVideoStream = stream;
-  
-      // Define el tipo de codec basado en la plataforma
-      const options: MediaRecorderOptions = isMobile 
-        ? { mimeType: 'video/mp4; codecs=h264,aac' } 
-        : { mimeType: 'video/webm; codecs=vp8,opus' };
-  
-      this.videoRecorder = new MediaRecorder(stream, options);
+      this.videoRecorder = new MediaRecorder(stream, {
+        mimeType: 'video/webm; codecs=vp8,opus'
+      });
       this.recordedChunks = [];
-  
+
       this.videoRecorder.ondataavailable = (event) => {
         if (event.data.size > 0) {
           this.recordedChunks.push(event.data);
         }
       };
-  
+
       this.videoRecorder.onstop = () => {
         this.cleanupVideoStream();
-  
-        // Crear el archivo de video
-        this.videoBlob = new Blob(this.recordedChunks, { type: options.mimeType });
-        const videoFile = new File([this.videoBlob], `video-${Date.now()}.${isMobile ? 'mp4' : 'webm'}`, {
-          type: options.mimeType
-        });
+
+        this.videoBlob = new Blob(this.recordedChunks, { type: 'video/webm' });
+        const videoFile = new File([this.videoBlob], `video-${Date.now()}.webm`, { type: 'video/webm' });
         this.selectedMultimedia.push(videoFile);
         this.toastr.success('Video con audio grabado con éxito');
         this.cdr.detectChanges();
       };
-  
-      // Iniciar la grabación
+
       this.videoRecorder.start();
       this.isRecordingVideo = true;
     } catch (error) {
-      // Mensaje específico para móviles
-      if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-        this.toastr.error('No se pudo iniciar la grabación de video con audio en el dispositivo móvil. Revisa los permisos de cámara y micrófono.');
-      } else {
-        this.toastr.error('No se pudo iniciar la grabación de video con audio');
-      }
+      this.toastr.error('No se pudo iniciar la grabación de video con audio');
       console.error('Error al iniciar la grabación de video con audio:', error);
       this.cleanupVideoStream();
     }
   }
-  
-  // Modificar el método stopVideoRecording
+
+  // Detener grabación de video
   private async stopVideoRecording() {
     if (this.videoRecorder && this.isRecordingVideo) {
       this.videoRecorder.stop();
       this.isRecordingVideo = false;
-            this.closeCamera();
-
-      // La limpieza del stream se realiza en el evento onstop del videoRecorder
     }
   }
 
-  // Añadir un nuevo método para limpiar el stream de video
+  // Limpiar stream de video
   private cleanupVideoStream() {
     if (this.currentVideoStream) {
       this.currentVideoStream.getTracks().forEach(track => {
@@ -173,6 +152,14 @@ export class EvidenciaComponent implements OnInit {
       this.currentVideoStream = null;
     }
   }
+
+  // Manejo de errores de grabación
+  private handleRecordingError(error: any) {
+    console.error('Error de grabación:', error);
+    this.toastr.error('Error al intentar grabar el video en dispositivo móvil. Intenta con otro navegador o revisa los permisos.');
+    this.cleanupVideoStream();
+  }
+
   ////////////////////////////////////////////////////////////////////
   async initCamera() {
     try {
