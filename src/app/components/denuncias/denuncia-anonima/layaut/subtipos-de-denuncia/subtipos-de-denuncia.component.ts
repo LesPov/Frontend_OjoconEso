@@ -83,7 +83,7 @@ export class SubtiposDeDenunciaComponent implements OnInit {
     if (!flagImage) {
       return '../../../../../../assets/img/default-denuncia.png'; // Imagen por defecto
     }
-    return `${environment.endpoint}uploads/${flagImage}`;
+    return `${environment.endpoint}uploads/subtipoDenuncias/subtipo/${flagImage}`;
   }
 
 

@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HeaderComponent } from '../header/header.component';
 import { ToastrService } from 'ngx-toastr';
+import { BotInfoService } from '../../../shared/bot/botInfoDenuncias';
 
 @Component({
   selector: 'app-consulta',
@@ -17,12 +18,23 @@ export class ConsultaComponent {
   claveUnica: string = '';
   denuncia: any = null;
   error: string = '';
+ // Nueva lista de mensajes
+ private infoEvidenciaList: string[] = [
+  "Consultas",
+ 
+];
 
   constructor(
     private denunciasService: DenunciasService,
-    private toastr: ToastrService
-  ) {}
+    private toastr: ToastrService,
+    private botInfoService: BotInfoService
 
+  ) {}
+  ngOnInit(): void {
+   
+    // Asignar la nueva lista de mensajes al bot
+    this.botInfoService.setInfoList(this.infoEvidenciaList);
+  }
   consultarDenuncia() {
     this.denuncia = null;
     this.error = '';
