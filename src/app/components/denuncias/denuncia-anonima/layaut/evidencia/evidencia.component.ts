@@ -49,7 +49,8 @@ export class EvidenciaComponent implements OnInit {
   videoRecorder: MediaRecorder | null = null;
   recordedChunks: Blob[] = [];
   videoBlob: Blob | null = null;
-  
+  private currentVideoStream: MediaStream | null = null;
+
   // Nueva lista de mensajes
   private infoEvidenciaList: string[] = [
     "Bienvenido a la sección de evidencia. Aquí podrás subir archivos multimedia relacionados con tu denuncia.",
@@ -79,68 +80,88 @@ export class EvidenciaComponent implements OnInit {
     this.botInfoService.setInfoList(this.infoEvidenciaList);
   }
   ///////////////////////////////GRABACION//////////////////////////
-  
   // Método para seleccionar el modo (foto o video)
   selectMode(mode: string) {
     this.isPhotoMode = mode === 'photo';
   }
 
-  // Método para alternar entre iniciar/detener grabación de video
+  // Modificar el método de toggleVideoRecording
   async toggleVideoRecording() {
     if (!this.isRecordingVideo) {
       await this.startVideoRecording();
     } else {
-      this.stopVideoRecording();
+      await this.stopVideoRecording();
       this.closeCamera();
 
     }
     this.cdr.detectChanges();
-
   }
 
-// Iniciar la grabación de video
-// Iniciar la grabación de video con audio
-private async startVideoRecording() {
-  try {
-    // Solicitar permisos para video y audio
-    const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-    
-    this.videoRecorder = new MediaRecorder(stream, { mimeType: 'video/webm; codecs=vp8,opus' });
-    this.recordedChunks = [];
+  // Modificar el método startVideoRecording
+  private async startVideoRecording() {
+    try {
+      // Solicitar permisos para video y audio
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: true,
+        audio: true
+      });
 
-    // Almacenar los datos grabados en los chunks
-    this.videoRecorder.ondataavailable = (event) => {
-      if (event.data.size > 0) {
-        this.recordedChunks.push(event.data);
-      }
-    };
+      // Guardar referencia al stream
+      this.currentVideoStream = stream;
 
-    // Finalizar la grabación y crear el archivo con video y audio
-    this.videoRecorder.onstop = () => {
-      this.videoBlob = new Blob(this.recordedChunks, { type: 'video/webm' });
-      const videoFile = new File([this.videoBlob], `video-${Date.now()}.webm`, { type: 'video/webm' });
-      this.selectedMultimedia.push(videoFile);
-      this.toastr.success('Video con audio grabado con éxito');
-      this.cdr.detectChanges();
-    };
+      this.videoRecorder = new MediaRecorder(stream, {
+        mimeType: 'video/webm; codecs=vp8,opus'
+      });
+      this.recordedChunks = [];
 
-    // Iniciar la grabación
-    this.videoRecorder.start();
-    this.isRecordingVideo = true;
-    this.cdr.detectChanges();
-  } catch (error) {
-    this.toastr.error('No se pudo iniciar la grabación de video con audio');
-    console.error('Error al iniciar la grabación de video con audio:', error);
+      this.videoRecorder.ondataavailable = (event) => {
+        if (event.data.size > 0) {
+          this.recordedChunks.push(event.data);
+        }
+      };
+
+      this.videoRecorder.onstop = () => {
+        // Detener y limpiar el stream inmediatamente después de que se detenga la grabación
+        this.cleanupVideoStream();
+
+        // Crear el archivo de video
+        this.videoBlob = new Blob(this.recordedChunks, { type: 'video/webm' });
+        const videoFile = new File([this.videoBlob], `video-${Date.now()}.webm`, {
+          type: 'video/webm'
+        });
+        this.selectedMultimedia.push(videoFile);
+        this.toastr.success('Video con audio grabado con éxito');
+        this.cdr.detectChanges();
+      };
+
+      // Iniciar la grabación
+      this.videoRecorder.start();
+      this.isRecordingVideo = true;
+    } catch (error) {
+      this.toastr.error('No se pudo iniciar la grabación de video con audio');
+      console.error('Error al iniciar la grabación de video con audio:', error);
+      this.cleanupVideoStream();
+    }
   }
-}
 
+  // Modificar el método stopVideoRecording
+  private async stopVideoRecording() {
+    if (this.videoRecorder && this.isRecordingVideo) {
+      this.videoRecorder.stop();
+      this.isRecordingVideo = false;
+      // La limpieza del stream se realiza en el evento onstop del videoRecorder
+    }
+  }
 
-// Detener la grabación de video
-private stopVideoRecording() {
-  this.videoRecorder?.stop();
-  this.isRecordingVideo = false;
-  this.cdr.detectChanges();
-}
+  // Añadir un nuevo método para limpiar el stream de video
+  private cleanupVideoStream() {
+    if (this.currentVideoStream) {
+      this.currentVideoStream.getTracks().forEach(track => {
+        track.stop();
+      });
+      this.currentVideoStream = null;
+    }
+  }
   ////////////////////////////////////////////////////////////////////
   async initCamera() {
     try {
@@ -279,13 +300,21 @@ private stopVideoRecording() {
   }
 
 
-  // Method to close camera
+  // Modificar el método closeCamera
   closeCamera() {
+    // Detener la grabación de video si está activa
+    if (this.isRecordingVideo) {
+      this.stopVideoRecording();
+    }
+
+    // Limpiar el stream de video
+    this.cleanupVideoStream();
+
+    // Detener el stream de la cámara
     if (this.videoStream) {
       this.videoStream.getTracks().forEach(track => track.stop());
       this.videoStream = null;
     }
-    this.stopVideoRecording();
 
     this.showCamera = false;
     this.videoElement = null;
@@ -519,12 +548,13 @@ private stopVideoRecording() {
   // Limpieza de recursos cuando el componente se destruye
   ngOnDestroy() {
     this.stopVideoRecording();
+    this.cleanupVideoStream();
     this.closeCamera();
-
     this.clearAudioRecording();
+
     if (this.currentStream) {
       this.currentStream.getTracks().forEach(track => track.stop());
+      this.currentStream = null;
     }
-
   }
 }

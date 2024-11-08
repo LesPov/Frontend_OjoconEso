@@ -349,9 +349,12 @@ audio {
     color: #ffff;
     background: none;
     border: none;
+    cursor: pointer;
 }
 .botonvideo.activo {
-    color: #ff4500; /* Un color de ejemplo cuando el botón está activo */
+    color: #f89406;
+    transform: scale(1.2);
+    font-weight: 600;
   }
 .close-btn i {
     font-size: 30px;
