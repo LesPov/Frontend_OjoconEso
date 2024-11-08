@@ -99,50 +99,60 @@ export class EvidenciaComponent implements OnInit {
   // Modificar el método startVideoRecording
   private async startVideoRecording() {
     try {
-      // Solicitar permisos para video y audio
+      // Verifica si el navegador admite la grabación en el móvil
+      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  
+      // Solicita permisos para video y audio
       const stream = await navigator.mediaDevices.getUserMedia({
         video: true,
         audio: true
       });
-
-      // Guardar referencia al stream
+  
+      // Guarda referencia al stream
       this.currentVideoStream = stream;
-
-      this.videoRecorder = new MediaRecorder(stream, {
-        mimeType: 'video/webm; codecs=vp8,opus'
-      });
+  
+      // Define el tipo de codec basado en la plataforma
+      const options: MediaRecorderOptions = isMobile 
+        ? { mimeType: 'video/mp4; codecs=h264,aac' } 
+        : { mimeType: 'video/webm; codecs=vp8,opus' };
+  
+      this.videoRecorder = new MediaRecorder(stream, options);
       this.recordedChunks = [];
-
+  
       this.videoRecorder.ondataavailable = (event) => {
         if (event.data.size > 0) {
           this.recordedChunks.push(event.data);
         }
       };
-
+  
       this.videoRecorder.onstop = () => {
-        // Detener y limpiar el stream inmediatamente después de que se detenga la grabación
         this.cleanupVideoStream();
-
+  
         // Crear el archivo de video
-        this.videoBlob = new Blob(this.recordedChunks, { type: 'video/webm' });
-        const videoFile = new File([this.videoBlob], `video-${Date.now()}.webm`, {
-          type: 'video/webm'
+        this.videoBlob = new Blob(this.recordedChunks, { type: options.mimeType });
+        const videoFile = new File([this.videoBlob], `video-${Date.now()}.${isMobile ? 'mp4' : 'webm'}`, {
+          type: options.mimeType
         });
         this.selectedMultimedia.push(videoFile);
         this.toastr.success('Video con audio grabado con éxito');
         this.cdr.detectChanges();
       };
-
+  
       // Iniciar la grabación
       this.videoRecorder.start();
       this.isRecordingVideo = true;
     } catch (error) {
-      this.toastr.error('No se pudo iniciar la grabación de video con audio');
+      // Mensaje específico para móviles
+      if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+        this.toastr.error('No se pudo iniciar la grabación de video con audio en el dispositivo móvil. Revisa los permisos de cámara y micrófono.');
+      } else {
+        this.toastr.error('No se pudo iniciar la grabación de video con audio');
+      }
       console.error('Error al iniciar la grabación de video con audio:', error);
       this.cleanupVideoStream();
     }
   }
-
+  
   // Modificar el método stopVideoRecording
   private async stopVideoRecording() {
     if (this.videoRecorder && this.isRecordingVideo) {
