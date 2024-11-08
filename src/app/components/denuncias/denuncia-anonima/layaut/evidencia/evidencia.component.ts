@@ -122,7 +122,6 @@ export class EvidenciaComponent implements OnInit {
         this.videoBlob = new Blob(this.recordedChunks, { type: 'video/webm' });
         const videoFile = new File([this.videoBlob], `video-${Date.now()}.webm`, { type: 'video/webm' });
         this.selectedMultimedia.push(videoFile);
-        this.toastr.success('Video con audio grabado con éxito');
         this.cdr.detectChanges();
       };
 
@@ -141,6 +140,7 @@ export class EvidenciaComponent implements OnInit {
       this.videoRecorder.stop();
       this.isRecordingVideo = false;
       this.closeCamera();
+      this.toastr.success('El video se ha guardado y está listo para visualizarse.');
 
     }
   }
