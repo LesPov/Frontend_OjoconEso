@@ -80,8 +80,8 @@ export class EvidenciaComponent implements OnInit {
     this.botInfoService.setInfoList(this.infoEvidenciaList);
   }
   ///////////////////////////////GRABACION//////////////////////////
-   // Selección de modo foto o video
-   selectMode(mode: string) {
+  // Selección de modo foto o video
+  selectMode(mode: string) {
     this.isPhotoMode = mode === 'photo';
   }
 
@@ -140,6 +140,8 @@ export class EvidenciaComponent implements OnInit {
     if (this.videoRecorder && this.isRecordingVideo) {
       this.videoRecorder.stop();
       this.isRecordingVideo = false;
+      this.closeCamera();
+
     }
   }
 
@@ -153,12 +155,7 @@ export class EvidenciaComponent implements OnInit {
     }
   }
 
-  // Manejo de errores de grabación
-  private handleRecordingError(error: any) {
-    console.error('Error de grabación:', error);
-    this.toastr.error('Error al intentar grabar el video en dispositivo móvil. Intenta con otro navegador o revisa los permisos.');
-    this.cleanupVideoStream();
-  }
+
 
   ////////////////////////////////////////////////////////////////////
   async initCamera() {
