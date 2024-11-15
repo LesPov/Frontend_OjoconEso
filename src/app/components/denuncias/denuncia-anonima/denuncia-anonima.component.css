@@ -81,6 +81,7 @@ button {
     text-decoration: none;
     font-family: inherit;
     font-size: 15px;
+    box-shadow: 0px 0px 6px 2px hsl(0deg 0% 3.54%);
 }
 
 button.learn-more {
@@ -185,6 +186,7 @@ button.learn-more:active::before {
     transition-timing-function: cubic-bezier(0.25, 0.8, 0.25, 1);
     transition-duration: 400ms;
     transition-property: color;
+    box-shadow: none;
 }
 
 .sabermas:focus,

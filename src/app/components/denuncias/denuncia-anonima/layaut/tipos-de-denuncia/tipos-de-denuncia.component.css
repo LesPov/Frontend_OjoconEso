@@ -272,10 +272,10 @@ img {
   bottom: 100px;
   opacity: 0;
   visibility: hidden;
-  /* Ocultar el botón inicialmente */
+  -webkit-tap-highlight-color: transparent;
   box-shadow: 0px 0px 6px 2px hsl(0deg 0% 3.54%);
   background: hsl(241.33deg 44.55% 19.8%);
-  padding: 0rem 0.2rem;
+  padding: 0rem 0.3rem;
   border-radius: .4rem;
   z-index: 1000;
   transition: opacity 0.4s, bottom 0.4s, visibility 0.4s;
