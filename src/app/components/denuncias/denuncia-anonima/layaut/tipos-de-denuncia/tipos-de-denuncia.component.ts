@@ -167,6 +167,6 @@ export class TiposDeDenunciaComponent implements OnInit {
           scrollUpElement.classList.add('scrollup--inactive');
         }
       }
-    }, 16); // Tiempo en milisegundos (16 ms para lograr 60fps)
+    }, 20); // Tiempo en milisegundos (16 ms para lograr 60fps)
   }
 }
