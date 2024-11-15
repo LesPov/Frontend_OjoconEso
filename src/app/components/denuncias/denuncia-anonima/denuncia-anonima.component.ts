@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HeaderComponent } from './layaut/header/header.component';
 import { Router } from '@angular/router';
@@ -11,10 +11,14 @@ import { BotInfoService } from '../shared/bot/botInfoDenuncias';
   standalone: true,
   imports: [FormsModule, CommonModule, HeaderComponent],
   templateUrl: './denuncia-anonima.component.html',
-  styleUrl: './denuncia-anonima.component.css'
+  styleUrls: ['./denuncia-anonima.component.css']
 })
 export class DenunciaAnonimaComponent implements OnInit {
-
+  @HostListener('window:scroll', [])
+  onWindowScroll() {
+    this.handleScrollUpVisibility();
+  }
+  
   public infoListAnonima: string[] = [
     "Como denunciar anonimamente",
     "En esta sección puedes realizar denuncias de forma anónima. Recuerda que una denuncia anónima te permite reportar situaciones sin revelar tu identidad, protegiendo así tu seguridad.",
@@ -27,9 +31,11 @@ export class DenunciaAnonimaComponent implements OnInit {
     private toastr: ToastrService,
     private botInfoService: BotInfoService
   ) { }
+  
   showwarnig(): void {
     this.toastr.warning('En próximas actualizaciones se agregará.', 'Warning');
   }
+
   ngOnInit(): void {
     this.botInfoService.setInfoList(this.infoListAnonima);
     this.botInfoService.getScrollIndex().subscribe(index => {
@@ -50,5 +56,34 @@ export class DenunciaAnonimaComponent implements OnInit {
 
   goToCrear() {
     this.router.navigate(['/tipos_de_denuncia']);
+  }
+
+  private handleScrollUpVisibility(): void {
+    const scrollUpElement = document.getElementById('scroll-up');
+    if (scrollUpElement) {
+      if (window.scrollY >= 560) {
+        scrollUpElement.classList.add('show-scroll');
+        scrollUpElement.classList.remove('scrollup--inactive');
+      } else {
+        scrollUpElement.classList.remove('show-scroll');
+        scrollUpElement.classList.add('scrollup--inactive');
+      }
+    }
+  }
+  
+  scrollToTop(): void {
+    const scrollStep = -window.scrollY / 20; // Ajusta este número para modificar la velocidad de desplazamiento
+    const scrollInterval = setInterval(() => {
+      if (window.scrollY !== 0) {
+        window.scrollBy(0, scrollStep);
+      } else {
+        clearInterval(scrollInterval);
+        // Ocultar el botón cuando llegues a la parte superior
+        const scrollUpElement = document.getElementById('scroll-up');
+        if (scrollUpElement) {
+          scrollUpElement.classList.add('scrollup--inactive');
+        }
+      }
+    }, 16); // Tiempo en milisegundos (16 ms para lograr 60fps)
   }
 }

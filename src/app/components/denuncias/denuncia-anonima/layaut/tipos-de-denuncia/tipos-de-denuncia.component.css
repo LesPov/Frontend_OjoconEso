@@ -1,83 +1,88 @@
 .container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    flex-direction: column;
-    top: 150px;
-    position: absolute;
-    z-index: 1;
-  }
-  
-  
-  .info {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    padding: 5px 15px;
-    gap: 5px;
-    background: #ffeba5;
-    margin-bottom: 5px;
-    box-shadow: 0px 5px 10px 2px #ccc;
-  }
-  
-  img {
-    width: 60px;
-    border-radius: 50%;
-    margin-left: 10px;
-    aspect-ratio: auto;
-  
-  }
-  
-  .info i {
-    font-size: 30px;
-  }
-  
-  .content {
-    width: 90%;
-    margin-bottom: 110px;
-  }
-  .content ul{
-    -webkit-tap-highlight-color: transparent;
-  }
-  .content p {
-    margin: 15px 0px;
-  }
-  
-  .denuncia-item {
-    list-style-type: none;
-    margin: 10px 0;
-    padding: 10px;
-    border-radius: 8px;
-    background-color: #e4e4e457;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  
-  }
-  .nombre{
-    font-weight: 600;
-      color: #000;
-      display: flex;
-      font-size: 15px;
-      align-items: center;
-      justify-content: center;
-      gap: 5px;
-  }
-  .denuncia-item:hover {
-    background-color: #f1f1f1;
-  }
-  
-  
-  .denuncia-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: 70px;
-    -webkit-tap-highlight-color: transparent;
-  
-  }
-  /* .denuncia-header::before{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  flex-direction: column;
+  top: 150px;
+  position: absolute;
+  z-index: 1;
+}
+
+
+.info {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 5px 15px;
+  gap: 5px;
+  background: #ffeba5;
+  margin-bottom: 5px;
+  box-shadow: 0px 5px 10px 2px #ccc;
+}
+
+img {
+  width: 60px;
+  border-radius: 50%;
+  margin-left: 10px;
+  aspect-ratio: auto;
+
+}
+
+.info i {
+  font-size: 30px;
+}
+
+.content {
+  width: 90%;
+  margin-bottom: 110px;
+}
+
+.content ul {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.content p {
+  margin: 15px 0px;
+}
+
+.denuncia-item {
+  list-style-type: none;
+  margin: 10px 0;
+  padding: 10px;
+  border-radius: 8px;
+  background-color: #e4e4e457;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+}
+
+.nombre {
+  font-weight: 600;
+  color: #000;
+  display: flex;
+  font-size: 15px;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.denuncia-item:hover {
+  background-color: #f1f1f1;
+}
+
+
+.denuncia-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 70px;
+  -webkit-tap-highlight-color: transparent;
+
+}
+
+/* .denuncia-header::before{
     content: "";
     position: absolute;
     width: 50%;
@@ -85,178 +90,230 @@
     margin-top: 60px;
     margin-left: 90px;
   } */
-  
-  .denuncia-header span {
-    font-weight: bold;
-    font-size: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: row;
-    gap: 20px;
-    color: #333;
-  
+
+.denuncia-header span {
+  font-weight: bold;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  gap: 20px;
+  color: #333;
+
+}
+
+.denuncia-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  margin-left: 10px;
+  object-fit: cover;
+  transition: all 0.3s ease;
+  animation: pulse 2s infinite;
+}
+
+.denuncia-icon:hover {
+  transform: scale(1.1);
+}
+
+.denuncia-icon.no-pulse {
+  animation: none;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0.8);
+
+    box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.7);
   }
-  
-  .denuncia-icon {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    margin-left: 10px;
-    object-fit: cover;
-    transition: all 0.3s ease;
-    animation: pulse 2s infinite;
-  }
-  
-  .denuncia-icon:hover {
+
+  50% {
     transform: scale(1.1);
+
+    box-shadow: 0 0 0 10px rgba(41, 41, 41, 0);
   }
-  
-  .denuncia-icon.no-pulse {
-    animation: none;
+
+  100% {
+    transform: scale(0.8);
+
+    box-shadow: 0 0 0 0 rgba(0, 123, 255, 0);
   }
-  
-  @keyframes pulse {
-    0% {
-      transform: scale(0.8);
-  
-      box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.7);
-    }
-  
-    50% {
-      transform: scale(1.1);
-  
-      box-shadow: 0 0 0 10px rgba(41, 41, 41, 0);
-    }
-  
-    100% {
-      transform: scale(0.8);
-  
-      box-shadow: 0 0 0 0 rgba(0, 123, 255, 0);
-    }
+}
+
+.denuncia-item.selected {
+  background-color: #ffeba5;
+  /* Color de fondo para el elemento seleccionado */
+  color: #000000;
+  /* Color del texto cuando está seleccionado */
+}
+
+.descripcion {
+  margin-top: 10px;
+  padding: 5px;
+  border-radius: 5px;
+  font-size: 14px;
+  transition: max-height 0.3s ease, opacity 0.3s ease;
+}
+
+.error {
+  color: red;
+}
+
+/* checkbox settings  */
+
+.ui-checkbox {
+  --primary-color: #1677ff;
+  --secondary-color: #fff;
+  --primary-hover-color: #4096ff;
+  /* checkbox */
+  --checkbox-diameter: 20px;
+  --checkbox-border-radius: 50%;
+  --checkbox-border-color: #393939;
+  --checkbox-border-width: 1px;
+  --checkbox-border-style: solid;
+  /* checkmark */
+  --checkmark-size: 1.2;
+}
+
+.ui-checkbox,
+.ui-checkbox *,
+.ui-checkbox *::before,
+.ui-checkbox *::after {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.ui-checkbox {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  width: var(--checkbox-diameter);
+  height: var(--checkbox-diameter);
+  border-radius: var(--checkbox-border-radius);
+  background: var(--secondary-color);
+  border: var(--checkbox-border-width) var(--checkbox-border-style) var(--checkbox-border-color);
+  -webkit-transition: all 0.3s;
+  -o-transition: all 0.3s;
+  transition: all 0.3s;
+  cursor: pointer;
+  position: relative;
+  margin-right: 10px;
+
+}
+
+.ui-checkbox::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  -webkit-box-shadow: 0 0 0 calc(var(--checkbox-diameter) / 2.5) var(--primary-color);
+  box-shadow: 0 0 0 calc(var(--checkbox-diameter) / 2.5) var(--primary-color);
+  border-radius: inherit;
+  opacity: 0;
+  -webkit-transition: all 0.5s cubic-bezier(0.12, 0.4, 0.29, 1.46);
+  -o-transition: all 0.5s cubic-bezier(0.12, 0.4, 0.29, 1.46);
+  transition: all 0.5s cubic-bezier(0.12, 0.4, 0.29, 1.46);
+}
+
+.ui-checkbox::before {
+  top: 40%;
+  left: 50%;
+  content: "";
+  position: absolute;
+  width: 4px;
+  height: 7px;
+  border-right: 2px solid var(--secondary-color);
+  border-bottom: 2px solid var(--secondary-color);
+  -webkit-transform: translate(-50%, -50%) rotate(45deg) scale(0);
+  -ms-transform: translate(-50%, -50%) rotate(45deg) scale(0);
+  transform: translate(-50%, -50%) rotate(45deg) scale(0);
+  opacity: 0;
+  -webkit-transition: all 0.1s cubic-bezier(0.71, -0.46, 0.88, 0.6), opacity 0.1s;
+  -o-transition: all 0.1s cubic-bezier(0.71, -0.46, 0.88, 0.6), opacity 0.1s;
+  transition: all 0.1s cubic-bezier(0.71, -0.46, 0.88, 0.6), opacity 0.1s;
+}
+
+/* actions */
+
+.ui-checkbox:hover {
+  border-color: var(--primary-color);
+}
+
+.ui-checkbox:checked {
+  background: var(--primary-color);
+  border-color: transparent;
+}
+
+.ui-checkbox:checked::before {
+  opacity: 1;
+  -webkit-transform: translate(-50%, -50%) rotate(45deg) scale(var(--checkmark-size));
+  -ms-transform: translate(-50%, -50%) rotate(45deg) scale(var(--checkmark-size));
+  transform: translate(-50%, -50%) rotate(45deg) scale(var(--checkmark-size));
+  -webkit-transition: all 0.2s cubic-bezier(0.12, 0.4, 0.29, 1.46) 0.1s;
+  -o-transition: all 0.2s cubic-bezier(0.12, 0.4, 0.29, 1.46) 0.1s;
+  transition: all 0.2s cubic-bezier(0.12, 0.4, 0.29, 1.46) 0.1s;
+}
+
+.ui-checkbox:active:not(:checked)::after {
+  -webkit-transition: none;
+  -o-transition: none;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  transition: none;
+  opacity: 1;
+}
+
+.scrollup {
+  position: fixed;
+  right: 1rem;
+  bottom: 100px;
+  opacity: 0;
+  visibility: hidden;
+  /* Ocultar el botón inicialmente */
+  box-shadow: 0px 0px 6px 2px hsl(0deg 0% 3.54%);
+  background: hsl(241.33deg 44.55% 19.8%);
+  padding: 0rem 0.2rem;
+  border-radius: .4rem;
+  z-index: 1000;
+  transition: opacity 0.4s, bottom 0.4s, visibility 0.4s;
+  animation: up-animation 4s ease-in-out forwards;
+}
+
+/* Mostrar el botón cuando el usuario ha hecho scroll */
+.show-scroll {
+  opacity: 1;
+  visibility: visible;
+  bottom: 100px;
+  font-size: 25px;
+  color: wheat;
+}
+
+/* Ocultar el botón cuando está inactivo */
+.scrollup--inactive {
+  opacity: 0;
+  visibility: hidden;
+  bottom: 70px;
+}
+
+
+/* Animación de rebote al hacer clic */
+.scrollup.clicked {
+  animation: bounce-animation 3s ease-in-out;
+}
+
+@keyframes bounce-animation {
+  0% {
+    transform: translateY(0);
   }
-  
-  .denuncia-item.selected {
-    background-color: #ffeba5;
-    /* Color de fondo para el elemento seleccionado */
-    color: #000000;
-    /* Color del texto cuando está seleccionado */
+
+  50% {
+    transform: translateY(-10px);
   }
-  
-  .descripcion {
-    margin-top: 10px;
-    padding: 5px;
-    border-radius: 5px;
-    font-size: 14px;
-    transition: max-height 0.3s ease, opacity 0.3s ease;
+
+  100% {
+    transform: translateY(0);
   }
-  
-  .error {
-    color: red;
-  }
-  
-  /* checkbox settings  */
-  
-  .ui-checkbox {
-    --primary-color: #1677ff;
-    --secondary-color: #fff;
-    --primary-hover-color: #4096ff;
-    /* checkbox */
-    --checkbox-diameter: 20px;
-    --checkbox-border-radius: 50%;
-    --checkbox-border-color: #393939;
-    --checkbox-border-width: 1px;
-    --checkbox-border-style: solid;
-    /* checkmark */
-    --checkmark-size: 1.2;
-  }
-  
-  .ui-checkbox,
-  .ui-checkbox *,
-  .ui-checkbox *::before,
-  .ui-checkbox *::after {
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-  }
-  
-  .ui-checkbox {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    width: var(--checkbox-diameter);
-    height: var(--checkbox-diameter);
-    border-radius: var(--checkbox-border-radius);
-    background: var(--secondary-color);
-    border: var(--checkbox-border-width) var(--checkbox-border-style) var(--checkbox-border-color);
-    -webkit-transition: all 0.3s;
-    -o-transition: all 0.3s;
-    transition: all 0.3s;
-    cursor: pointer;
-    position: relative;
-    margin-right: 10px;
-  
-  }
-  
-  .ui-checkbox::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    -webkit-box-shadow: 0 0 0 calc(var(--checkbox-diameter) / 2.5) var(--primary-color);
-    box-shadow: 0 0 0 calc(var(--checkbox-diameter) / 2.5) var(--primary-color);
-    border-radius: inherit;
-    opacity: 0;
-    -webkit-transition: all 0.5s cubic-bezier(0.12, 0.4, 0.29, 1.46);
-    -o-transition: all 0.5s cubic-bezier(0.12, 0.4, 0.29, 1.46);
-    transition: all 0.5s cubic-bezier(0.12, 0.4, 0.29, 1.46);
-  }
-  
-  .ui-checkbox::before {
-    top: 40%;
-    left: 50%;
-    content: "";
-    position: absolute;
-    width: 4px;
-    height: 7px;
-    border-right: 2px solid var(--secondary-color);
-    border-bottom: 2px solid var(--secondary-color);
-    -webkit-transform: translate(-50%, -50%) rotate(45deg) scale(0);
-    -ms-transform: translate(-50%, -50%) rotate(45deg) scale(0);
-    transform: translate(-50%, -50%) rotate(45deg) scale(0);
-    opacity: 0;
-    -webkit-transition: all 0.1s cubic-bezier(0.71, -0.46, 0.88, 0.6), opacity 0.1s;
-    -o-transition: all 0.1s cubic-bezier(0.71, -0.46, 0.88, 0.6), opacity 0.1s;
-    transition: all 0.1s cubic-bezier(0.71, -0.46, 0.88, 0.6), opacity 0.1s;
-  }
-  
-  /* actions */
-  
-  .ui-checkbox:hover {
-    border-color: var(--primary-color);
-  }
-  
-  .ui-checkbox:checked {
-    background: var(--primary-color);
-    border-color: transparent;
-  }
-  
-  .ui-checkbox:checked::before {
-    opacity: 1;
-    -webkit-transform: translate(-50%, -50%) rotate(45deg) scale(var(--checkmark-size));
-    -ms-transform: translate(-50%, -50%) rotate(45deg) scale(var(--checkmark-size));
-    transform: translate(-50%, -50%) rotate(45deg) scale(var(--checkmark-size));
-    -webkit-transition: all 0.2s cubic-bezier(0.12, 0.4, 0.29, 1.46) 0.1s;
-    -o-transition: all 0.2s cubic-bezier(0.12, 0.4, 0.29, 1.46) 0.1s;
-    transition: all 0.2s cubic-bezier(0.12, 0.4, 0.29, 1.46) 0.1s;
-  }
-  
-  .ui-checkbox:active:not(:checked)::after {
-    -webkit-transition: none;
-    -o-transition: none;
-    -webkit-box-shadow: none;
-    box-shadow: none;
-    transition: none;
-    opacity: 1;
-  }
+}

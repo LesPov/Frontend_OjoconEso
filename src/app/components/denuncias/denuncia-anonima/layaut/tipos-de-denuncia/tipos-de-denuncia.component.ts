@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
@@ -19,6 +19,10 @@ import { environment } from '../../../../../../environments/environment';
   styleUrl: './tipos-de-denuncia.component.css'
 })
 export class TiposDeDenunciaComponent implements OnInit {
+  @HostListener('window:scroll', [])
+  onWindowScroll() {
+    this.handleScrollUpVisibility();
+  }
   tiposDenunciasAnonimas: TipoDenunciaInterface[] = [];
   descripcionVisible: number | null = null;
   selectedDenunciaIndex: number | null = null;
@@ -135,5 +139,34 @@ export class TiposDeDenunciaComponent implements OnInit {
 
   isPulsing(index: number): boolean {
     return this.pulsingStates[index];
+  }
+
+  private handleScrollUpVisibility(): void {
+    const scrollUpElement = document.getElementById('scroll-up');
+    if (scrollUpElement) {
+      if (window.scrollY >= 560) {
+        scrollUpElement.classList.add('show-scroll');
+        scrollUpElement.classList.remove('scrollup--inactive');
+      } else {
+        scrollUpElement.classList.remove('show-scroll');
+        scrollUpElement.classList.add('scrollup--inactive');
+      }
+    }
+  }
+  
+  scrollToTop(): void {
+    const scrollStep = -window.scrollY / 20; // Ajusta este número para modificar la velocidad de desplazamiento
+    const scrollInterval = setInterval(() => {
+      if (window.scrollY !== 0) {
+        window.scrollBy(0, scrollStep);
+      } else {
+        clearInterval(scrollInterval);
+        // Ocultar el botón cuando llegues a la parte superior
+        const scrollUpElement = document.getElementById('scroll-up');
+        if (scrollUpElement) {
+          scrollUpElement.classList.add('scrollup--inactive');
+        }
+      }
+    }, 16); // Tiempo en milisegundos (16 ms para lograr 60fps)
   }
 }
