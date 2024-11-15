@@ -43,17 +43,17 @@ h1 {
     transform-origin: center;
 }
 
- .a1 {
+.a1 {
 
     filter: drop-shadow(0px 0px 10px rgb(115, 0, 125));
 }
 
- .a2 {
+.a2 {
 
     filter: drop-shadow(0px 0px 10px rgb(3, 0, 187));
 }
 
- .a3 {
+.a3 {
 
     filter: drop-shadow(0px 0px 10px rgb(0, 151, 0));
 }
@@ -213,12 +213,14 @@ button.learn-more:active::before {
     transition-duration: 400ms;
     transition-property: width, left;
 }
+
 .scrollup {
     position: fixed;
     right: 1rem;
     bottom: 56px;
     opacity: 0;
-    visibility: hidden; /* Ocultar el botón inicialmente */
+    visibility: hidden;
+    /* Ocultar el botón inicialmente */
     box-shadow: 0px 0px 6px 2px hsl(0deg 0% 3.54%);
     background: hsl(241.33deg 44.55% 19.8%);
     padding: 0rem 0.2rem;
@@ -251,7 +253,15 @@ button.learn-more:active::before {
 }
 
 @keyframes bounce-animation {
-    0% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
-    100% { transform: translateY(0); }
+    0% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+
+    100% {
+        transform: translateY(0);
+    }
 }

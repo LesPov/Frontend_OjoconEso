@@ -31,14 +31,13 @@
     </ul>
   </div>
   <a class="scrollup" id="scroll-up" (click)="scrollToTop()">
-    <i class='bx bx-down-arrow-alt scrollup__icon'></i>
-</a>
+    <i class='bx bx-up-arrow-alt scrollup__icon'></i>
+  </a>
 </div>
 
 <ng-template #noData>
   <p>No hay denuncias anónimas o de ambas categorías disponibles.</p>
 </ng-template>
 
-<app-footer 
-[denunciaSeleccionada]="selectedDenunciaIndex !== null" [showDots]="true" (continuar)="handleContinue()">
+<app-footer [denunciaSeleccionada]="selectedDenunciaIndex !== null" [showDots]="true" (continuar)="handleContinue()">
 </app-footer>
