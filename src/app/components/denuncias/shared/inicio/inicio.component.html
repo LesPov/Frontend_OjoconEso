@@ -1,3 +1,6 @@
+<!-- inicio.component.html -->
+<app-biembenido *ngIf="showWelcomeComponent"></app-biembenido>
+
 <div class="body">
     <source srcset="imagen.webp" type="image/webp">
     <img class="imagen_logo1" loading="lazy" src="../../../../../assets/img/denuncias/denuncias_anonimas/denunciasvirtuales.png" alt="">
@@ -14,7 +17,7 @@
         </button>
         <div class="logaout">
             <a class="login"  routerLink="/login">Iniciar sesión <i class='bx bx-right-arrow-alt'></i></a>
-            <a class="register"(click)="showwarnig()">Regístrate <i class='bx bx-right-arrow-alt'></i></a>
+            <a class="register" routerLink="/register" >Regístrate <i class='bx bx-right-arrow-alt'></i></a>
         </div>
         <a (click)="showwarnig()">¿Cómo hacer una denuncia? <i class='bx bx-help-circle'></i></a>
     </div>

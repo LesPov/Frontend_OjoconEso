@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { HeaderAuthComponent } from '../header-auth/header-auth.component';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Userauths } from '../../interfaces/auths';
 import { AuthsService } from '../../services/auths';
@@ -11,11 +11,13 @@ import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [HeaderAuthComponent, CommonModule,FormsModule],
+  imports: [HeaderAuthComponent, CommonModule,FormsModule,RouterLink],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
 export class LoginComponent implements OnInit {
+  navigateRoute: string = '';
+
   user: Userauths = {
     username: '',
     passwordorrandomPassword: '', // Cambiado para permitir el uso de contraseña o contraseña aleatoria
@@ -31,6 +33,7 @@ export class LoginComponent implements OnInit {
 
 
   ngOnInit(): void { }
+
 
   loginUser() {
     // Validamos que el usuario ingrese valores

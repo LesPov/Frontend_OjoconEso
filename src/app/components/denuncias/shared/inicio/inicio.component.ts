@@ -17,6 +17,7 @@ export class InicioComponent {
   modalTitle: string = '';
   callUrl: string = '';
   navigateRoute: string = '';
+  showWelcomeComponent: boolean = true; // Configura según tu lógica
 
   constructor(private router: Router,
     private toastr: ToastrService,
