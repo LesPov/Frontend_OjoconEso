@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, HostListener, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { HeaderComponent } from './layaut/header/header.component';
+import { HeaderComponent } from './layout/header/header.component';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { BotInfoService } from '../shared/bot/botInfoDenuncias';

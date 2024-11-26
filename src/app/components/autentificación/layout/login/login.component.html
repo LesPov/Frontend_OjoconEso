@@ -1,0 +1,30 @@
+<app-header-auth [title]="'Inicio de Sesión'" [showSpeakButton]="true" [componentName]="'tipo'"></app-header-auth>
+<div class="wrapper">
+    <!-- <img class="logo" src="../../../assets/img/logo.png" alt="img login"> -->
+
+    <div class="row1">
+        <h6>Ingresa tus credenciales</h6>
+
+        <label class="subtitle">Email</label>
+        <div class="form-floating ">
+            <input type="text" [(ngModel)]="user.username" class="form-control" placeholder="Introduce tu correo electrónico">
+        </div>
+
+        <label class="subtitle">Contraseña</label>
+        <div class="form-floating ">
+            <input type="password" [(ngModel)]="user.passwordorrandomPassword" class="form-control" placeholder="Introduce tu contraseña">
+            <a class="olvidPassword" routerLink="/login/passwordrecovery">¿Olvido su contraseña?</a>
+
+        </div>
+
+       <div class="info">
+        <button class="learn-more"  (click)="loginUser()">Iniciar Sesión</button>
+
+       
+        <a routerLink="/singin">Crear una cuenta</a> 
+        <a class="terms" routerLink="/terms">Términos y condiciones</a>
+
+       </div>
+
+    </div>
+</div>
