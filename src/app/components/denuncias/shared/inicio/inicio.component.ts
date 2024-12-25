@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { BiembenidoComponent } from '../bienvenido/biembenido.component';
+import { BiembenidoComponent } from '../bienvenido/bienvenido.component';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({

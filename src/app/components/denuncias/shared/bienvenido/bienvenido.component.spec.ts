@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { BiembenidoComponent } from './biembenido.component';
+import { BiembenidoComponent } from './bienvenido.component';
 
 describe('BiembenidoComponent', () => {
   let component: BiembenidoComponent;
@@ -10,8 +10,8 @@ describe('BiembenidoComponent', () => {
     await TestBed.configureTestingModule({
       imports: [BiembenidoComponent]
     })
-    .compileComponents();
-    
+      .compileComponents();
+
     fixture = TestBed.createComponent(BiembenidoComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

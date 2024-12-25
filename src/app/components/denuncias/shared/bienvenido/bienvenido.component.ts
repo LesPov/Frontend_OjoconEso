@@ -7,8 +7,8 @@ import { FormsModule } from '@angular/forms';
   selector: 'app-biembenido',
   standalone: true,
   imports: [FormsModule, CommonModule],
-  templateUrl: './biembenido.component.html',
-  styleUrl: './biembenido.component.css'
+  templateUrl: './bienvenido.component.html',
+  styleUrl: './bienvenido.component.css'
 })
 export class BiembenidoComponent implements OnInit {
   showModal: boolean = true;  // El modal comienza visible
