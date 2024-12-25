@@ -7,9 +7,10 @@ import { BotInfoService } from '../../../shared/bot/botInfoDenuncias';
 import { FooterComponent } from '../footer/footer.component';
 import { HeaderComponent } from '../header/header.component';
 import { TipoDenunciaInterface } from '../../interface/tipoDenunciaInterface';
-import { DenunciasService } from '../../service/denuncias.service';
-import { DenunciaStorageService } from '../../service/denunciaStorage.service';
+import { DenunciasService } from '../../service/denuncias/denuncias.service';
+import { DenunciaStorageService } from '../../service/denuncias/denunciaStorage.service';
 import { environment } from '../../../../../../environments/environment';
+
 
 @Component({
   selector: 'app-tipos-de-denuncia',
@@ -46,10 +47,10 @@ export class TiposDeDenunciaComponent implements OnInit {
     private denunciasService: DenunciasService,
     private router: Router,
     private toastr: ToastrService,
-    private botInfoService: BotInfoService ,
+    private botInfoService: BotInfoService,
     private denunciaStorage: DenunciaStorageService
 
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.obtenerTiposDenunciaAnonimas();
@@ -83,19 +84,19 @@ export class TiposDeDenunciaComponent implements OnInit {
     if (this.isSpeaking && this.speakingIndex === index) {
       return;
     }
-  
+
     const denuncia = this.tiposDenunciasAnonimas[index];
     if (denuncia) {
       const name = denuncia.nombre;
       const description = denuncia.descripcion || 'No hay descripción disponible';
 
       this.botInfoService.cancelSpeak();
-  
+
       this.isSpeaking = true;
       this.speakingIndex = index;
       this.stopPulse(index);
-  
-      
+
+
       this.botInfoService.speak(name)
         .then(() => this.botInfoService.speak(description))
         .then(() => {
@@ -109,7 +110,7 @@ export class TiposDeDenunciaComponent implements OnInit {
         });
     }
   }
-  
+
   getImageUrl(flagImage: string): string {
     if (!flagImage) {
       return '../../../../../../assets/img/default-denuncia.png'; // Imagen por defecto
@@ -122,7 +123,7 @@ export class TiposDeDenunciaComponent implements OnInit {
       this.toastr.error('Por favor, selecciona una denuncia para continuar.', 'Error');
       return;
     }
-    
+
     const selectedDenuncia = this.tiposDenunciasAnonimas[this.selectedDenunciaIndex];
     if (selectedDenuncia) {
       // Guardar en el storage
@@ -131,7 +132,7 @@ export class TiposDeDenunciaComponent implements OnInit {
       this.router.navigate(['../subtipos_de_denuncia', { nombreTipoDenuncia: selectedDenuncia.nombre }]);
     }
   }
-  
+
 
   stopPulse(index: number): void {
     this.pulsingStates[index] = false;
@@ -153,7 +154,7 @@ export class TiposDeDenunciaComponent implements OnInit {
       }
     }
   }
-  
+
   scrollToTop(): void {
     const scrollStep = -window.scrollY / 20; // Ajusta este número para modificar la velocidad de desplazamiento
     const scrollInterval = setInterval(() => {

@@ -6,8 +6,8 @@ import { ToastrService } from 'ngx-toastr';
 import { BotInfoService } from '../../../shared/bot/botInfoDenuncias';
 
 import { SubtipoDenunciaInterface } from '../../interface/subtipoDenunciaInterface';
-import { DenunciasService } from '../../service/denuncias.service';
-import { DenunciaStorageService } from '../../service/denunciaStorage.service';
+import { DenunciasService } from '../../service/denuncias/denuncias.service';
+import { DenunciaStorageService } from '../../service/denuncias/denunciaStorage.service';
 import { environment } from '../../../../../../environments/environment';
 import { FooterComponent } from '../footer/footer.component';
 import { HeaderComponent } from '../header/header.component';

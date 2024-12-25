@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { DenunciaAnonimaInterface } from '../interface/denunciaAnonimaInterface';
+import { DenunciaAnonimaInterface } from '../../interface/denunciaAnonimaInterface';
 
 @Injectable({
   providedIn: 'root'
@@ -22,13 +22,13 @@ export class DenunciaStorageService {
   // Método actualizado para manejar archivos
   setDescripcionPruebas(descripcion: string, pruebas?: File[], audio?: File[]) {
     this.denuncia.descripcion = descripcion;
-    
+
     if (pruebas && pruebas.length > 0) {
       this.pruebasFiles = pruebas;
       this.denuncia.pruebas = pruebas.map(file => file.name).join(',');
       console.log('Pruebas guardadas:', this.pruebasFiles);
     }
-    
+
     if (audio && audio.length > 0) {
       this.audioFiles = audio;
       this.denuncia.audio = audio.map(file => file.name).join(',');

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ConsultaDenunciaResponse } from '../../interface/consultasDenunciasAnonimasInterface';
-import { DenunciasService } from '../../service/denuncias.service';
+import { DenunciasService } from '../..//service/denuncias/denuncias.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HeaderComponent } from '../header/header.component';
