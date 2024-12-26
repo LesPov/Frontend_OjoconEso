@@ -60,7 +60,7 @@ export class EvidenciaComponent implements OnInit {
     "Recuerda que toda la evidencia que proporciones ayudará a mejorar la atención a tu denuncia.",
     "Gracias por subir tu evidencia. Puedes continuar con el siguiente paso cuando estés listo."
   ];
-
+ 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -78,6 +78,9 @@ export class EvidenciaComponent implements OnInit {
     });
     // Asignar la nueva lista de mensajes al bot
     this.botInfoService.setInfoList(this.infoEvidenciaList);
+    this.botInfoService.cancelSpeak();
+    const iconElement = document.querySelector('.bx-user-voice');
+    iconElement?.classList.remove('speaking-active');
   }
   ///////////////////////////////GRABACION//////////////////////////
   // Selección de modo foto o video

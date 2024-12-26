@@ -18,7 +18,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   @Input() componentName: string = '';
   private darkTheme = 'dark-theme';
   @Input() tipoDenuncia: string | null = null;  // Nuevo input para el tipo de denuncia
-  private iconTheme = 'uil-sun'; isSpeaking: boolean = false;
+  private iconTheme = 'uil-sun';
+   isSpeaking: boolean = false;
   private subscription: Subscription | undefined;
   denunciaSelected: boolean = false;  // Flag to track if a denuncia is selected
 
@@ -55,20 +56,25 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   speakHeader(): void {
     const iconElement = document.querySelector('.bx-user-voice');
-
+  
     const text = this.botInfoService.getNextInfo(); // true para obtener la info del header
-    this.botInfoService.speak(text)
-      .then(() => {
-        this.isSpeaking = false;
-      })
-      .catch(error => {
-        console.error('Error al hablar:', error);
-        this.isSpeaking = false;
-      });
+    this.botInfoService.speak(text, () => {
+      this.isSpeaking = false;
+      this.toggleSpeakingAnimation(false);
+      iconElement?.classList.remove('speaking-active');
+    })
+    .then(() => {
+      this.isSpeaking = false;
+    })
+    .catch(error => {
+      console.error('Error al hablar:', error);
+      this.isSpeaking = false;
+    });
   }
+  
   speak(): void {
     const iconElement = document.querySelector('.bx-user-voice');
-
+  
     if (this.isSpeaking) {
       this.botInfoService.cancelSpeak();
       this.isSpeaking = false;
@@ -78,21 +84,25 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.isSpeaking = true;
       this.toggleSpeakingAnimation(true);
       iconElement?.classList.add('speaking-active');
-
+  
       const text = this.botInfoService.getNextInfo();
-
-      this.botInfoService.speak(text)
-        .then(() => {
-          this.isSpeaking = false;
-          this.toggleSpeakingAnimation(false);
-          iconElement?.classList.remove('speaking-active');
-        })
-        .catch(error => {
-          console.error('Error al hablar:', error);
-          this.isSpeaking = false;
-          this.toggleSpeakingAnimation(false);
-          iconElement?.classList.remove('speaking-active');
-        });
+  
+      this.botInfoService.speak(text, () => {
+        this.isSpeaking = false;
+        this.toggleSpeakingAnimation(false);
+        iconElement?.classList.remove('speaking-active');
+      })
+      .then(() => {
+        this.isSpeaking = false;
+        this.toggleSpeakingAnimation(false);
+        iconElement?.classList.remove('speaking-active');
+      })
+      .catch(error => {
+        console.error('Error al hablar:', error);
+        this.isSpeaking = false;
+        this.toggleSpeakingAnimation(false);
+        iconElement?.classList.remove('speaking-active');
+      });
     }
   }
 

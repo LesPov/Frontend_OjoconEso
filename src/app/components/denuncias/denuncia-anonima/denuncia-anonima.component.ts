@@ -25,7 +25,7 @@ export class DenunciaAnonimaComponent implements OnInit {
     "Te guiaremos paso a paso en el proceso para que puedas completar toda la información necesaria.",
     "Recuerda que el proceso incluye varias etapas, como seleccionar el tipo de denuncia, agregar evidencias, indicar la ubicación del incidente, entre otras.",
   ];
-
+ 
   constructor(
     private router: Router,
     private toastr: ToastrService,

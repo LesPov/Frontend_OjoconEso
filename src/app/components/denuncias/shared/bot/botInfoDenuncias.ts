@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { Router, NavigationEnd } from '@angular/router';
+import { filter } from 'rxjs/operators';
 
 declare var responsiveVoice: any;
 
@@ -8,21 +10,26 @@ declare var responsiveVoice: any;
 })
 export class BotInfoService {
   private currentInfoList: string[] = [];
-  private headerInfoList: string[] = []; // Lista específica para el encabezado
   private currentComponentSubject = new BehaviorSubject<string>('anonima');
   private infoIndexSubject = new BehaviorSubject<number>(0);
   private scrollIndexSubject = new BehaviorSubject<number>(0);
   private isPaused = false;
   private isSpeaking = false;
 
-  constructor() {
+  constructor(private router: Router) {
     if (responsiveVoice) {
       responsiveVoice.init();
     }
+
+    // Suscribirse a los eventos de navegación
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe(() => {
+      this.cancelSpeak();
+    });
   }
 
   setCurrentComponent(component: string): void {
-    
     this.currentComponentSubject.next(component);
     this.infoIndexSubject.next(0);
   }
@@ -37,7 +44,6 @@ export class BotInfoService {
   }
 
   setHeaderInfoList(infoList: string[]): void {
-    this.headerInfoList = infoList;
     this.infoIndexSubject.next(0);
   }
 
@@ -62,17 +68,20 @@ export class BotInfoService {
     return this.scrollIndexSubject.asObservable();
   }
 
-  speak(text: string): Promise<void> {
+  speak(text: string, onEndCallback?: () => void): Promise<void> {
     return new Promise((resolve, reject) => {
       if (responsiveVoice) {
         this.cancelSpeak();
         this.isSpeaking = true;
-
+  
         responsiveVoice.speak(text, "Spanish Latin American Female", {
           pitch: 1.1,
           rate: 1.2,
           onend: () => {
             this.isSpeaking = false;
+            if (onEndCallback) {
+              onEndCallback();
+            }
             resolve();
           },
           onerror: (error: any) => {
@@ -102,9 +111,9 @@ export class BotInfoService {
 
   cancelSpeak(): void {
     if (responsiveVoice) {
-      responsiveVoice.cancel();
       this.isPaused = false;
       this.isSpeaking = false;
+      responsiveVoice.cancel();
     }
   }
 

@@ -9,14 +9,20 @@ export class DenunciaStorageService {
   private pruebasFiles: File[] = [];
   private audioFiles: File[] = [];
 
+  constructor() {
+    this.loadFromLocalStorage();
+  }
+
   // Método para almacenar el tipo de denuncia
   setTipoDenuncia(tipo: string) {
     this.denuncia.nombreTipo = tipo;
+    this.saveToLocalStorage();
   }
 
   // Método para almacenar el subtipo de denuncia
   setSubtipoDenuncia(subtipo: string) {
     this.denuncia.nombreSubtipo = subtipo;
+    this.saveToLocalStorage();
   }
 
   // Método actualizado para manejar archivos
@@ -34,11 +40,14 @@ export class DenunciaStorageService {
       this.denuncia.audio = audio.map(file => file.name).join(',');
       console.log('Audio guardado:', this.audioFiles);
     }
+
+    this.saveToLocalStorage();
   }
 
   // Método para almacenar la dirección
   setDireccion(direccion: string) {
     this.denuncia.direccion = direccion;
+    this.saveToLocalStorage();
   }
 
   // Obtener los datos completos para crear la denuncia
@@ -60,5 +69,19 @@ export class DenunciaStorageService {
     this.denuncia = {};
     this.pruebasFiles = [];
     this.audioFiles = [];
+    localStorage.removeItem('denuncia');
+  }
+
+  // Guardar en localStorage
+  private saveToLocalStorage() {
+    localStorage.setItem('denuncia', JSON.stringify(this.denuncia));
+  }
+
+  // Cargar desde localStorage
+  private loadFromLocalStorage() {
+    const storedDenuncia = localStorage.getItem('denuncia');
+    if (storedDenuncia) {
+      this.denuncia = JSON.parse(storedDenuncia);
+    }
   }
 }
