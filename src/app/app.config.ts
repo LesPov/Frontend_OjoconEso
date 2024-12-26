@@ -17,6 +17,7 @@ export const appConfig: ApplicationConfig = {
       positionClass: 'toast-top-right',
       preventDuplicates: true,
     }),
+    
     importProvidersFrom(BrowserAnimationsModule),
     provideAnimations(),
   ]

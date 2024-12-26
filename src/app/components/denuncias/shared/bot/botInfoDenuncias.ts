@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { Router, NavigationEnd } from '@angular/router';
+import { filter } from 'rxjs/operators';
 
 declare var responsiveVoice: any;
 
@@ -14,14 +16,20 @@ export class BotInfoService {
   private isPaused = false;
   private isSpeaking = false;
 
-  constructor() {
+  constructor(private router: Router) {
     if (responsiveVoice) {
       responsiveVoice.init();
     }
+
+    // Suscribirse a los eventos de navegación
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe(() => {
+      this.cancelSpeak();
+    });
   }
 
   setCurrentComponent(component: string): void {
-    
     this.currentComponentSubject.next(component);
     this.infoIndexSubject.next(0);
   }
@@ -103,7 +111,6 @@ export class BotInfoService {
       this.isPaused = false;
       this.isSpeaking = false;
       responsiveVoice.cancel();
-
     }
   }
 
