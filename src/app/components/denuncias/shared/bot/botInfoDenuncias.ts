@@ -68,17 +68,20 @@ export class BotInfoService {
     return this.scrollIndexSubject.asObservable();
   }
 
-  speak(text: string): Promise<void> {
+  speak(text: string, onEndCallback?: () => void): Promise<void> {
     return new Promise((resolve, reject) => {
       if (responsiveVoice) {
         this.cancelSpeak();
         this.isSpeaking = true;
-
+  
         responsiveVoice.speak(text, "Spanish Latin American Female", {
           pitch: 1.1,
           rate: 1.2,
           onend: () => {
             this.isSpeaking = false;
+            if (onEndCallback) {
+              onEndCallback();
+            }
             resolve();
           },
           onerror: (error: any) => {

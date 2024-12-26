@@ -90,6 +90,9 @@ export class TiposDeDenunciaComponent implements OnInit {
     this.selectedDenunciaIndex = this.selectedDenunciaIndex === index ? null : index;
     this.denunciaSelected = this.selectedDenunciaIndex !== null;
     this.stopPulse(index);
+    this.botInfoService.cancelSpeak();
+    const iconElement = document.querySelector('.bx-user-voice');
+    iconElement?.classList.remove('speaking-active');
   }
 
  /**

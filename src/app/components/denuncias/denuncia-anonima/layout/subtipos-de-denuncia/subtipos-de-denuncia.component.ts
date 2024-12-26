@@ -78,6 +78,9 @@ export class SubtiposDeDenunciaComponent implements OnInit {
     this.selectedDenunciaIndex = this.selectedDenunciaIndex === index ? null : index;
     this.denunciaSelected = this.selectedDenunciaIndex !== null;  // Set the flag based on selection
     this.stopPulse(index);
+    this.botInfoService.cancelSpeak();
+    const iconElement = document.querySelector('.bx-user-voice');
+    iconElement?.classList.remove('speaking-active');
   }
   getImageUrl(flagImage: string): string {
     if (!flagImage) {
