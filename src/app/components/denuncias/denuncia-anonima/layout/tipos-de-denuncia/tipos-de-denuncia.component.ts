@@ -19,20 +19,30 @@ import { environment } from '../../../../../../environments/environment';
   styleUrl: './tipos-de-denuncia.component.css'
 })
 export class TiposDeDenunciaComponent implements OnInit {
+  // Escucha el evento de desplazamiento de la ventana
   @HostListener('window:scroll', [])
   onWindowScroll() {
     this.handleScrollUpVisibility();
   }
+
+  // Lista de tipos de denuncias anónimas
   tiposDenunciasAnonimas: TipoDenunciaInterface[] = [];
+  // Índice de la descripción visible
   descripcionVisible: number | null = null;
+  // Índice de la denuncia seleccionada
   selectedDenunciaIndex: number | null = null;
+  // Indica si el bot está hablando
   isSpeaking: boolean = false;
+  // Índice de la denuncia que se está hablando
   speakingIndex: number | null = null;
+  // Estados de pulsación para cada denuncia
   pulsingStates: boolean[] = [];
-  denunciaSelected: boolean = false;  // Flag to track if a denuncia is selected
-  tipoDenuncia: string | null = null;  // Guardar el tipo de denuncia
+  // Indica si una denuncia está seleccionada
+  denunciaSelected: boolean = false;
+  // Tipo de denuncia seleccionada
+  tipoDenuncia: string | null = null;
 
-
+  // Lista de información para el bot
   private infoListAnonima: string[] = [
     "Estás en la sección de denuncias anónimas. Aquí puedes reportar sin revelar tu identidad.",
     "Estos son los tipos de denuncias que tenemos disponibles. Selecciona una para obtener más detalles.",
@@ -41,21 +51,21 @@ export class TiposDeDenunciaComponent implements OnInit {
     "Para obtener acceso a funciones avanzadas como usar la inteligencia artificial, regístrate y comienza sesión."
   ];
 
-
   constructor(
     private denunciasService: DenunciasService,
     private router: Router,
     private toastr: ToastrService,
     private botInfoService: BotInfoService,
     private denunciaStorage: DenunciaStorageService
-
   ) { }
 
+  // Método que se ejecuta al inicializar el componente
   ngOnInit(): void {
     this.obtenerTiposDenunciaAnonimas();
     this.botInfoService.setInfoList(this.infoListAnonima);
   }
 
+  // Obtiene los tipos de denuncias anónimas desde el servicio
   obtenerTiposDenunciaAnonimas(): void {
     this.denunciasService.getTiposDenunciaAnonimas().subscribe({
       next: (tipos) => {
@@ -69,48 +79,62 @@ export class TiposDeDenunciaComponent implements OnInit {
     });
   }
 
+  // Alterna la visibilidad de la descripción de una denuncia
   toggleDescripcion(index: number): void {
     this.descripcionVisible = this.descripcionVisible === index ? null : index;
     this.stopPulse(index);
   }
 
+  // Selecciona una denuncia
   selectDenuncia(index: number): void {
     this.selectedDenunciaIndex = this.selectedDenunciaIndex === index ? null : index;
-    this.denunciaSelected = this.selectedDenunciaIndex !== null;  // Set the flag based on selection
+    this.denunciaSelected = this.selectedDenunciaIndex !== null;
     this.stopPulse(index);
   }
-  speakDenuncia(index: number): void {
-    if (this.isSpeaking && this.speakingIndex === index) {
-      return;
-    }
 
-    const denuncia = this.tiposDenunciasAnonimas[index];
-    if (denuncia) {
-      const name = denuncia.nombre;
-      const description = denuncia.descripcion || 'No hay descripción disponible';
-
-      this.botInfoService.cancelSpeak();
-
-      this.isSpeaking = true;
-      this.speakingIndex = index;
-      this.stopPulse(index);
-
-
-      this.botInfoService.speak(name)
-        .then(() => this.botInfoService.speak(description))
-        .then(() => {
-          this.isSpeaking = false;
-          this.speakingIndex = null;
-        })
-        .catch((error) => {
-          console.error('Error al hablar:', error);
-          this.isSpeaking = false;
-          this.speakingIndex = null;
-        });
-    }
+ /**
+ * Habla la información de una denuncia.
+ * @param index - El índice de la denuncia en la lista de tipos de denuncias anónimas.
+ */
+speakDenuncia(index: number): void {
+  // Si el bot ya está hablando y el índice es el mismo, no hacer nada.
+  if (this.isSpeaking && this.speakingIndex === index) {
+    return;
   }
-  
 
+  // Obtener la denuncia correspondiente al índice.
+  const denuncia = this.tiposDenunciasAnonimas[index];
+  if (denuncia) {
+    // Obtener el nombre y la descripción de la denuncia.
+    const name = denuncia.nombre;
+    const description = denuncia.descripcion || 'No hay descripción disponible';
+
+    // Cancelar cualquier discurso en curso.
+    this.botInfoService.cancelSpeak();
+
+    // Indicar que el bot está hablando y establecer el índice de la denuncia que se está hablando.
+    this.isSpeaking = true;
+    this.speakingIndex = index;
+    // Detener la pulsación de la denuncia.
+    this.stopPulse(index);
+
+    // Hablar el nombre de la denuncia.
+    this.botInfoService.speak(name)
+      .then(() => this.botInfoService.speak(description)) // Luego hablar la descripción.
+      .then(() => {
+        // Cuando termine de hablar, actualizar los estados.
+        this.isSpeaking = false;
+        this.speakingIndex = null;
+      })
+      .catch((error) => {
+        // Manejar cualquier error que ocurra durante el discurso.
+        console.error('Error al hablar:', error);
+        this.isSpeaking = false;
+        this.speakingIndex = null;
+      });
+  }
+}
+  // Obtiene la URL de la imagen de una denuncia
   getImageUrl(flagImage: string): string {
     if (!flagImage) {
       return '../../../../../../assets/img/default-denuncia.png'; // Imagen por defecto
@@ -118,6 +142,7 @@ export class TiposDeDenunciaComponent implements OnInit {
     return `${environment.endpoint}uploads/tipoDenuncias/tipo/${flagImage}`;
   }
 
+  // Maneja la acción de continuar
   handleContinue(): void {
     if (this.selectedDenunciaIndex === null) {
       this.toastr.error('Por favor, selecciona una denuncia para continuar.', 'Error');
@@ -133,15 +158,17 @@ export class TiposDeDenunciaComponent implements OnInit {
     }
   }
 
-
+  // Detiene la pulsación de una denuncia
   stopPulse(index: number): void {
     this.pulsingStates[index] = false;
   }
 
+  // Verifica si una denuncia está pulsando
   isPulsing(index: number): boolean {
     return this.pulsingStates[index];
   }
 
+  // Maneja la visibilidad del botón de desplazamiento hacia arriba
   private handleScrollUpVisibility(): void {
     const scrollUpElement = document.getElementById('scroll-up');
     if (scrollUpElement) {
@@ -155,6 +182,7 @@ export class TiposDeDenunciaComponent implements OnInit {
     }
   }
 
+  // Desplaza la ventana hacia arriba
   scrollToTop(): void {
     const scrollStep = -window.scrollY / 20; // Ajusta este número para modificar la velocidad de desplazamiento
     const scrollInterval = setInterval(() => {
