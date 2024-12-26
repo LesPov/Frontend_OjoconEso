@@ -334,7 +334,7 @@ h1 {
 }
 
 .speaking {
-    animation: none;
+    animation: none; 
     /* Desactivamos cualquier animación cuando está "hablando" */
 }
 

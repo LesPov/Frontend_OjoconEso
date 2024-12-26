@@ -92,7 +92,7 @@ export class TiposDeDenunciaComponent implements OnInit {
     this.stopPulse(index);
     this.botInfoService.cancelSpeak();
     const iconElement = document.querySelector('.bx-user-voice');
-    iconElement?.classList.remove('speaking-active');
+    iconElement?.classList.toggle('speaking-active');
   }
 
  /**
