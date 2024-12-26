@@ -303,7 +303,7 @@ h1 {
     font-size: 40px;
     height: 40px;
     background: transparent;
-    color: #fff;
+    color: #fff !important;
 }
 
 .bx-user-voice.speaking-active {
@@ -319,7 +319,7 @@ h1 {
     }
 
     50% {
-        transform: scale(1.2);
+        transform: scale(1.5);
         /* Aumentamos ligeramente el tamaño */
     }
 
@@ -334,11 +334,11 @@ h1 {
 }
 
 .speaking {
-    animation: none; 
+    animation: none !important; 
     /* Desactivamos cualquier animación cuando está "hablando" */
 }
 
 /* Al estar activo, removemos la animación de pulso */
 .speaking-active.pulse-animation {
-    animation: none;
+    animation: none !important;
 }
