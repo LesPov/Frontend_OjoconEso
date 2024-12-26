@@ -80,35 +80,71 @@ export class TiposDeDenunciaComponent implements OnInit {
     this.stopPulse(index);
   }
   speakDenuncia(index: number): void {
-    if (this.isSpeaking && this.speakingIndex === index) {
+    if (!this.canSpeak(index)) {
       return;
     }
-
-    const denuncia = this.tiposDenunciasAnonimas[index];
-    if (denuncia) {
-      const name = denuncia.nombre;
-      const description = denuncia.descripcion || 'No hay descripción disponible';
-
-      this.botInfoService.cancelSpeak();
-
-      this.isSpeaking = true;
-      this.speakingIndex = index;
-      this.stopPulse(index);
-
-
-      this.botInfoService.speak(name)
-        .then(() => this.botInfoService.speak(description))
-        .then(() => {
-          this.isSpeaking = false;
-          this.speakingIndex = null;
-        })
-        .catch((error) => {
-          console.error('Error al hablar:', error);
-          this.isSpeaking = false;
-          this.speakingIndex = null;
-        });
+  
+    const { name, description } = this.getDenunciaInfo(index);
+  
+    if (name && description) {
+      this.startSpeaking(index, name, description);
     }
   }
+  
+  /**
+   * Verifica si se puede hablar y gestiona el estado inicial.
+   */
+  private canSpeak(index: number): boolean {
+    if (this.isSpeaking && this.speakingIndex === index) {
+      return false;
+    }
+    this.botInfoService.cancelSpeak();
+    this.isSpeaking = true;
+    this.speakingIndex = index;
+    this.stopPulse(index);
+    return true;
+  }
+  
+  /**
+   * Obtiene el nombre y la descripción de una denuncia.
+   */
+  private getDenunciaInfo(index: number): { name: string; description: string } {
+    const denuncia = this.tiposDenunciasAnonimas[index];
+    if (!denuncia) {
+      console.warn(`No se encontró la denuncia en el índice ${index}`);
+      return { name: '', description: '' };
+    }
+  
+    return {
+      name: denuncia.nombre,
+      description: denuncia.descripcion || 'No hay descripción disponible',
+    };
+  }
+  
+  /**
+   * Maneja la lógica de la síntesis de voz.
+   */
+  private startSpeaking(index: number, name: string, description: string): void {
+    this.botInfoService.speak(name);
+    this.botInfoService.speak(description)
+      .then(() => {
+        this.resetSpeakingState();
+      })
+      .catch((error) => {
+        console.error('Error al hablar:', error);
+        this.resetSpeakingState();
+      });
+  }
+  
+  /**
+   * Restablece el estado relacionado con la síntesis de voz.
+   */
+  private resetSpeakingState(): void {
+    this.isSpeaking = false;
+    this.speakingIndex = null;
+  }
+  
+
 
   getImageUrl(flagImage: string): string {
     if (!flagImage) {
