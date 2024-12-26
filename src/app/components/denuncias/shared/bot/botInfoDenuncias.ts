@@ -100,9 +100,10 @@ export class BotInfoService {
 
   cancelSpeak(): void {
     if (responsiveVoice) {
-      responsiveVoice.cancel();
       this.isPaused = false;
       this.isSpeaking = false;
+      responsiveVoice.cancel();
+
     }
   }
 
