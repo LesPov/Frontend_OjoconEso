@@ -11,7 +11,6 @@ import { DenunciasService } from '../../service/denuncias/denuncias.service';
 import { DenunciaStorageService } from '../../service/denuncias/denunciaStorage.service';
 import { environment } from '../../../../../../environments/environment';
 
-
 @Component({
   selector: 'app-tipos-de-denuncia',
   standalone: true,
@@ -80,46 +79,36 @@ export class TiposDeDenunciaComponent implements OnInit {
     this.denunciaSelected = this.selectedDenunciaIndex !== null;  // Set the flag based on selection
     this.stopPulse(index);
   }
-
- 
   speakDenuncia(index: number): void {
     if (this.isSpeaking && this.speakingIndex === index) {
       return;
     }
 
-    const denuncia = this.getDenuncia(index);
+    const denuncia = this.tiposDenunciasAnonimas[index];
     if (denuncia) {
-      this.startSpeaking(index, denuncia);
+      const name = denuncia.nombre;
+      const description = denuncia.descripcion || 'No hay descripción disponible';
+
+      this.botInfoService.cancelSpeak();
+
+      this.isSpeaking = true;
+      this.speakingIndex = index;
+      this.stopPulse(index);
+
+
+      this.botInfoService.speak(name)
+        .then(() => this.botInfoService.speak(description))
+        .then(() => {
+          this.isSpeaking = false;
+          this.speakingIndex = null;
+        })
+        .catch((error) => {
+          console.error('Error al hablar:', error);
+          this.isSpeaking = false;
+          this.speakingIndex = null;
+        });
     }
   }
-
-  private getDenuncia(index: number): TipoDenunciaInterface | null {
-    return this.tiposDenunciasAnonimas[index] || null;
-  }
-
-  private startSpeaking(index: number, denuncia: TipoDenunciaInterface): void {
-    const name = denuncia.nombre;
-    const description = denuncia.descripcion || 'No hay descripción disponible';
-
-    this.botInfoService.cancelSpeak();
-    this.isSpeaking = true;
-    this.speakingIndex = index;
-    this.stopPulse(index);
-
-    this.botInfoService.speak(name);
-    this.botInfoService.speak(description)
-      .then(() => this.resetSpeakingState())
-      .catch((error) => {
-        console.error('Error al hablar:', error);
-        this.resetSpeakingState();
-      });
-  }
-
-  private resetSpeakingState(): void {
-    this.isSpeaking = false;
-    this.speakingIndex = null;
-  }
-
 
   getImageUrl(flagImage: string): string {
     if (!flagImage) {
