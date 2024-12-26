@@ -80,37 +80,46 @@ export class TiposDeDenunciaComponent implements OnInit {
     this.denunciaSelected = this.selectedDenunciaIndex !== null;  // Set the flag based on selection
     this.stopPulse(index);
   }
-  
+
+ 
   speakDenuncia(index: number): void {
     if (this.isSpeaking && this.speakingIndex === index) {
       return;
     }
 
-    const denuncia = this.tiposDenunciasAnonimas[index];
+    const denuncia = this.getDenuncia(index);
     if (denuncia) {
-      const name = denuncia.nombre;
-      const description = denuncia.descripcion || 'No hay descripción disponible';
-
-      this.botInfoService.cancelSpeak();
-
-      this.isSpeaking = true;
-      this.speakingIndex = index;
-      this.stopPulse(index);
-
-      // Hablar inmediatamente sin esperar
-      this.botInfoService.speak(name);
-      this.botInfoService.speak(description)
-        .then(() => {
-          this.isSpeaking = false;
-          this.speakingIndex = null;
-        })
-        .catch((error) => {
-          console.error('Error al hablar:', error);
-          this.isSpeaking = false;
-          this.speakingIndex = null;
-        });
+      this.startSpeaking(index, denuncia);
     }
   }
+
+  private getDenuncia(index: number): TipoDenunciaInterface | null {
+    return this.tiposDenunciasAnonimas[index] || null;
+  }
+
+  private startSpeaking(index: number, denuncia: TipoDenunciaInterface): void {
+    const name = denuncia.nombre;
+    const description = denuncia.descripcion || 'No hay descripción disponible';
+
+    this.botInfoService.cancelSpeak();
+    this.isSpeaking = true;
+    this.speakingIndex = index;
+    this.stopPulse(index);
+
+    this.botInfoService.speak(name);
+    this.botInfoService.speak(description)
+      .then(() => this.resetSpeakingState())
+      .catch((error) => {
+        console.error('Error al hablar:', error);
+        this.resetSpeakingState();
+      });
+  }
+
+  private resetSpeakingState(): void {
+    this.isSpeaking = false;
+    this.speakingIndex = null;
+  }
+
 
   getImageUrl(flagImage: string): string {
     if (!flagImage) {
