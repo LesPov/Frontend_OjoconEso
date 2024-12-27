@@ -8,7 +8,7 @@ import { ToastrService } from 'ngx-toastr';
 import { BotInfoService } from '../../../shared/bot/botInfoDenuncias';
 import { FooterComponent } from '../footer/footer.component';
 import { HeaderComponent } from '../header/header.component';
-import { DenunciaStorageService } from '../../service/denunciaStorage.service';
+import { DenunciaStorageService } from '../../service/denuncias/denunciaStorage.service';
 
 @Component({
   selector: 'app-ubicacion',
@@ -71,7 +71,7 @@ export class UbicacionComponent implements OnInit {
     this.map = L.map('map', {
       zoomControl: false, // Desactiva el control de zoom
     }).setView([lat, lng], 13);
-  
+
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '© OpenStreetMap contributors'
     }).addTo(this.map);
@@ -110,7 +110,7 @@ export class UbicacionComponent implements OnInit {
       this.toastr.error('El dispositivo no soporta geolocalización');
     }
   }
-  
+
   private async obtenerDireccion(lat: number, lng: number) {
     this.isLoading = true;
     try {

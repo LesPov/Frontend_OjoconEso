@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { environment } from '../../../../../environments/environment';
-import { TipoDenunciaInterface } from '../interface/tipoDenunciaInterface';
-import { DenunciaAnonimaInterface } from '../interface/denunciaAnonimaInterface';
-import { ConsultaDenunciaResponse } from '../interface/consultasDenunciasAnonimasInterface';
+import { environment } from '../../../../../../environments/environment';
+import { TipoDenunciaInterface } from '../../interface/tipoDenunciaInterface';
+import { DenunciaAnonimaInterface } from '../../interface/denunciaAnonimaInterface';
+import { ConsultaDenunciaResponse } from '../../interface/consultasDenunciasAnonimasInterface';
 
 @Injectable({
   providedIn: 'root'

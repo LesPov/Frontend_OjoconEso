@@ -6,8 +6,8 @@ import { DenunciaAnonimaInterface } from '../../interface/denunciaAnonimaInterfa
 import { BotInfoService } from '../../../shared/bot/botInfoDenuncias';
 import { FooterComponent } from '../footer/footer.component';
 import { HeaderComponent } from '../header/header.component';
-import { DenunciasService } from '../../service/denuncias.service';
-import { DenunciaStorageService } from '../../service/denunciaStorage.service';
+import { DenunciasService } from '../../service/denuncias/denuncias.service';
+import { DenunciaStorageService } from '../../service/denuncias/denunciaStorage.service';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({

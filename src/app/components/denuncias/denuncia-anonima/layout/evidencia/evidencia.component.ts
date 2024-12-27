@@ -7,7 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 import { BotInfoService } from '../../../shared/bot/botInfoDenuncias';
 import { FooterComponent } from '../footer/footer.component';
 import { HeaderComponent } from '../header/header.component';
-import { DenunciaStorageService } from '../../service/denunciaStorage.service';
+import { DenunciaStorageService } from '../../service/denuncias/denunciaStorage.service';
 
 @Component({
   selector: 'app-evidencia',
