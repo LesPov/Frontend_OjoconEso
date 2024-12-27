@@ -28,6 +28,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
+    this.botInfoService.getIsSpeaking().subscribe(isSpeaking => {
+      this.toggleSpeakingAnimation(isSpeaking);
+    });
     this.botInfoService.setCurrentComponent(this.componentName);
     this.subscription = this.botInfoService.getCurrentComponent().subscribe(
       component => {
@@ -50,6 +53,23 @@ export class HeaderComponent implements OnInit, OnDestroy {
     return this.componentName === 'subtipos' && this.tipoDenuncia
       ? `Subtipos de ${this.tipoDenuncia}`  // Muestra el tipo de denuncia en el header
       : this.title;
+  }
+
+  toggleSpeakingAnimation(isSpeaking: boolean) {
+    const iconElement = document.querySelector('.bx-user-voice');
+    iconElement?.classList.toggle('speaking-active', isSpeaking);
+  }
+  
+  activatePulseAnimation(): void {
+    const element = document.querySelector('.cuadro');
+    if (element) {
+      element.classList.add('pulse-animation');  // Activamos la animación de pulso
+    }
+  }
+
+
+  getHeaderClass(): string {
+    return this.componentName === 'subtipos' ? 'header-subtipos' : '';
   }
 
 
@@ -102,24 +122,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
 
-  toggleSpeakingAnimation(isSpeaking: boolean) {
-    const iconElement = document.querySelector('.bx-user-voice');
-    iconElement?.classList.toggle('speaking-active', isSpeaking);
-  }
-
-  activatePulseAnimation(): void {
-    const element = document.querySelector('.cuadro');
-    if (element) {
-      element.classList.add('pulse-animation');  // Activamos la animación de pulso
-    }
-  }
-
-
-  getHeaderClass(): string {
-    return this.componentName === 'subtipos' ? 'header-subtipos' : '';
-  }
-
-
+ 
   toggleTheme(): void {
     const currentTheme = this.getCurrentTheme();
     const currentIcon = this.getCurrentIcon();

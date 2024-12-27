@@ -8,12 +8,13 @@ declare var responsiveVoice: any;
 })
 export class BotInfoService {
   private currentInfoList: string[] = [];
-  private headerInfoList: string[] = []; // Lista específica para el encabezado
+  private headerInfoList: string[] = [];
   private currentComponentSubject = new BehaviorSubject<string>('anonima');
   private infoIndexSubject = new BehaviorSubject<number>(0);
   private scrollIndexSubject = new BehaviorSubject<number>(0);
   private isPaused = false;
   private isSpeaking = false;
+  private isSpeakingSubject = new BehaviorSubject<boolean>(false); // Nuevo BehaviorSubject
 
   constructor() {
     if (responsiveVoice) {
@@ -22,7 +23,6 @@ export class BotInfoService {
   }
 
   setCurrentComponent(component: string): void {
-    
     this.currentComponentSubject.next(component);
     this.infoIndexSubject.next(0);
   }
@@ -67,16 +67,19 @@ export class BotInfoService {
       if (responsiveVoice) {
         this.cancelSpeak();
         this.isSpeaking = true;
+        this.isSpeakingSubject.next(true); // Emitir el estado de isSpeaking
 
         responsiveVoice.speak(text, "Spanish Latin American Female", {
           pitch: 1.1,
           rate: 1.2,
           onend: () => {
             this.isSpeaking = false;
+            this.isSpeakingSubject.next(false); // Emitir el estado de isSpeaking
             resolve();
           },
           onerror: (error: any) => {
             this.isSpeaking = false;
+            this.isSpeakingSubject.next(false); // Emitir el estado de isSpeaking
             reject(error);
           }
         });
@@ -105,10 +108,15 @@ export class BotInfoService {
       responsiveVoice.cancel();
       this.isPaused = false;
       this.isSpeaking = false;
+      this.isSpeakingSubject.next(false); // Emitir el estado de isSpeaking
     }
   }
 
   isSpeakingNow(): boolean {
     return this.isSpeaking;
+  }
+
+  getIsSpeaking(): Observable<boolean> {
+    return this.isSpeakingSubject.asObservable(); // Método para obtener el observable
   }
 }
