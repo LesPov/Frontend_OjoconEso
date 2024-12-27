@@ -79,6 +79,7 @@ export class TiposDeDenunciaComponent implements OnInit {
     this.selectedDenunciaIndex = this.selectedDenunciaIndex === index ? null : index;
     this.denunciaSelected = this.selectedDenunciaIndex !== null;  // Set the flag based on selection
     this.stopPulse(index);
+    
   }
   speakDenuncia(index: number): void {
     if (this.isSpeaking && this.speakingIndex === index) {

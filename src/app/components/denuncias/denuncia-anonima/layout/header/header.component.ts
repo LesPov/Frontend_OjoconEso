@@ -60,12 +60,17 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.botInfoService.speak(text)
       .then(() => {
         this.isSpeaking = false;
+        this.toggleSpeakingAnimation(false);
+        iconElement?.classList.remove('speaking-active');
       })
       .catch(error => {
         console.error('Error al hablar:', error);
         this.isSpeaking = false;
+        this.toggleSpeakingAnimation(false);
+        iconElement?.classList.remove('speaking-active');
       });
   }
+
   speak(): void {
     const iconElement = document.querySelector('.bx-user-voice');
 
@@ -97,17 +102,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
 
+  toggleSpeakingAnimation(isSpeaking: boolean) {
+    const iconElement = document.querySelector('.bx-user-voice');
+    iconElement?.classList.toggle('speaking-active', isSpeaking);
+  }
+
   activatePulseAnimation(): void {
     const element = document.querySelector('.cuadro');
     if (element) {
       element.classList.add('pulse-animation');  // Activamos la animación de pulso
     }
-  }
-
-
-  toggleSpeakingAnimation(isSpeaking: boolean) {
-    const iconElement = document.querySelector('.bx-user-voice');
-    iconElement?.classList.toggle('speaking-active', isSpeaking);
   }
 
 
