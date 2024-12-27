@@ -55,10 +55,6 @@ export class TiposDeDenunciaComponent implements OnInit {
   ngOnInit(): void {
     this.obtenerTiposDenunciaAnonimas();
     this.botInfoService.setInfoList(this.infoListAnonima);
-
-    this.botInfoService.getIsSpeaking().subscribe(isSpeaking => {
-      this.isSpeaking = isSpeaking;
-    });
   }
 
   obtenerTiposDenunciaAnonimas(): void {
@@ -83,7 +79,7 @@ export class TiposDeDenunciaComponent implements OnInit {
     this.selectedDenunciaIndex = this.selectedDenunciaIndex === index ? null : index;
     this.denunciaSelected = this.selectedDenunciaIndex !== null;  // Set the flag based on selection
     this.stopPulse(index);
-
+    
   }
   speakDenuncia(index: number): void {
     if (this.isSpeaking && this.speakingIndex === index) {
