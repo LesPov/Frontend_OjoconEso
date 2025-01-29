@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { Router } from '@angular/router';
-import * as L from 'leaflet';
+import L from 'leaflet';  // Sintaxis ESM
 import { ToastrService } from 'ngx-toastr';
 import { BotInfoService } from '../../../shared/bot/botInfoDenuncias';
 import { FooterComponent } from '../footer/footer.component';

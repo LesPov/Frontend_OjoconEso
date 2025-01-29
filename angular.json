@@ -13,6 +13,10 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
+            "allowedCommonJsDependencies": [
+              "leaflet",
+              "@asymmetrik/ngx-leaflet"
+            ],
             "outputPath": "dist/frontend-ojocon-eso",
             "index": "src/index.html",
             "browser": "src/main.ts",
